@@ -19,11 +19,10 @@ namespace OOAD
             get
             {
                 if (dataGridView1.CurrentRow?.DataBoundItem == null)
-                {
                     return null;
-                }
 
                 var value = dataGridView1.CurrentRow.Cells["AppointmentId"].Value?.ToString();
+
                 return Guid.TryParse(value, out var id) ? id : null;
             }
         }
@@ -38,22 +37,29 @@ namespace OOAD
         public MainCalendar(Guid userId)
         {
             InitializeComponent();
+
             _userId = userId;
+
             Load += (_, _) => ViewLoaded?.Invoke(this, EventArgs.Empty);
+
             monthCalendar1.DateSelected += (_, _) =>
             {
                 label1.Text = $"Choosing Date: {SelectedDate:dd/MM/yyyy}";
                 SelectedDateChanged?.Invoke(this, EventArgs.Empty);
             };
+
             checkBox1.CheckedChanged += (_, _) => ShowAllAppointmentsChanged?.Invoke(this, EventArgs.Empty);
             btnAdd.Click += (_, _) => AddRequested?.Invoke(this, EventArgs.Empty);
             btnUpdate.Click += (_, _) => UpdateRequested?.Invoke(this, EventArgs.Empty);
+            btnDelete.Click += (_, _) => DeleteRequested?.Invoke(this, EventArgs.Empty);
+
             InitializePresenter();
         }
 
         private void InitializePresenter()
         {
             var dbContext = new AppDBContext();
+
             var calendarRepository = new CalendarRepository(dbContext);
             var appointmentRepository = new AppointmentRepository(dbContext);
 
@@ -77,6 +83,37 @@ namespace OOAD
                 })
                 .OrderBy(a => a.StartTime)
                 .ToList();
+
+            if (dataGridView1.Columns["AppointmentId"] != null)
+            {
+                dataGridView1.Columns["AppointmentId"].Visible = false;
+            }
+
+            if (dataGridView1.Columns["Name"] != null)
+            {
+                dataGridView1.Columns["Name"].HeaderText = "Tên cuộc hẹn";
+                dataGridView1.Columns["Name"].Width = 160;
+            }
+
+            if (dataGridView1.Columns["Location"] != null)
+            {
+                dataGridView1.Columns["Location"].HeaderText = "Địa điểm";
+                dataGridView1.Columns["Location"].Width = 130;
+            }
+
+            if (dataGridView1.Columns["StartTime"] != null)
+            {
+                dataGridView1.Columns["StartTime"].HeaderText = "Bắt đầu";
+                dataGridView1.Columns["StartTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dataGridView1.Columns["StartTime"].Width = 140;
+            }
+
+            if (dataGridView1.Columns["EndTime"] != null)
+            {
+                dataGridView1.Columns["EndTime"].HeaderText = "Kết thúc";
+                dataGridView1.Columns["EndTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dataGridView1.Columns["EndTime"].Width = 140;
+            }
         }
 
         public bool ConfirmDelete()
@@ -102,13 +139,7 @@ namespace OOAD
 
         public void OpenAppointmentForm(Guid calendarId, Guid? appointmentId, DateTime selectedDate)
         {
-            using var form = new Appointment(calendarId, appointmentId, selectedDate);
-            form.ShowDialog(this);
-        }
-
-        public void OpenConflictResolution(Guid appointmentId)
-        {
-            using var form = new ConflictResolution(appointmentId);
+            using var form = new Appointment(_userId, calendarId, appointmentId, selectedDate);
             form.ShowDialog(this);
         }
 

@@ -14,13 +14,16 @@ namespace OOAD.Repository
 
         public IEnumerable<Reminders> GetAll()
         {
-            return _context.Set<Reminders>().ToList();
+            return _context.Set<Reminders>()
+                .OrderBy(r => r.ReminderTime)
+                .ToList();
         }
 
         public IEnumerable<Reminders> GetByAppointmentId(Guid appointmentId)
         {
             return _context.Set<Reminders>()
                 .Where(r => r.AppointmentId == appointmentId)
+                .OrderBy(r => r.ReminderTime)
                 .ToList();
         }
 
@@ -44,10 +47,9 @@ namespace OOAD.Repository
         public void Delete(Guid reminderId)
         {
             var reminder = GetById(reminderId);
+
             if (reminder == null)
-            {
                 return;
-            }
 
             _context.Set<Reminders>().Remove(reminder);
             _context.SaveChanges();

@@ -1,4 +1,3 @@
-using OOAD.Model;
 using OOAD.Service;
 
 namespace OOAD.Presenter
@@ -36,6 +35,7 @@ namespace OOAD.Presenter
         private void OnViewLoaded(object? sender, EventArgs e)
         {
             var calendar = _calendarService.GetCalendarByUserId(_userId);
+
             if (calendar == null)
             {
                 _view.ShowError("User chưa có calendar.");
@@ -49,11 +49,10 @@ namespace OOAD.Presenter
         private void LoadAppointments()
         {
             if (_calendarId == Guid.Empty)
-            {
                 return;
-            }
 
             var appointments = _appointmentService.GetAppointmentsByCalendarId(_calendarId);
+
             if (!_view.ShowAllAppointments)
             {
                 appointments = appointments
@@ -85,6 +84,7 @@ namespace OOAD.Presenter
             }
 
             var appointmentId = _view.SelectedAppointmentId;
+
             if (!appointmentId.HasValue)
             {
                 _view.ShowError("Vui lòng chọn cuộc hẹn để cập nhật.");
@@ -98,6 +98,7 @@ namespace OOAD.Presenter
         private void OnDeleteRequested(object? sender, EventArgs e)
         {
             var appointmentId = _view.SelectedAppointmentId;
+
             if (!appointmentId.HasValue)
             {
                 _view.ShowError("Vui lòng chọn cuộc hẹn để xóa.");
@@ -105,9 +106,7 @@ namespace OOAD.Presenter
             }
 
             if (!_view.ConfirmDelete())
-            {
                 return;
-            }
 
             _appointmentService.DeleteAppointment(appointmentId.Value);
             _view.ShowMessage("Đã xóa cuộc hẹn.");

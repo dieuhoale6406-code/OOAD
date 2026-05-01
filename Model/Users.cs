@@ -8,7 +8,19 @@ namespace OOAD.Model
     {
         [Key]
         public Guid UserId { get; set; }
+
+        public string FullName { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        public string PasswordHash { get; set; } = string.Empty;
+
         public Calendars Calendar { get; set; } = null!;
+
         public List<UserGroupMeetings> UserGroupMeetings { get; set; } = new List<UserGroupMeetings>();
     }
 }

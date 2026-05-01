@@ -1,6 +1,7 @@
 using OOAD.DTOs;
 using OOAD.Model;
 using OOAD.Repository;
+using OOAD.Utils;
 
 namespace OOAD.Service
 {
@@ -15,7 +16,17 @@ namespace OOAD.Service
 
         public Users? Login(LoginRequestDto request)
         {
-            return _userRepository.GetById(request.UserId);
+            if (request == null)
+                return null;
+
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                return null;
+
+            var user = _userRepository.GetByEmail(request.Email);
+            if (user == null)
+                return null;
+
+            return PasswordHasher.Verify(request.Password, user.PasswordHash) ? user : null;
         }
     }
 }

@@ -8,11 +8,11 @@ namespace OOAD
     public partial class ConflictResolution : Form
     {
         private ConflictResolutionPresenter? _presenter;
-        private readonly Guid _appointmentId;
 
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public Guid AppointmentId { get; set; }
+
         public bool ReplaceOldAppointments => radioButton2.Checked;
 
         public event EventHandler? ViewLoaded;
@@ -22,11 +22,13 @@ namespace OOAD
         public ConflictResolution(Guid appointmentId)
         {
             InitializeComponent();
-            _appointmentId = appointmentId;
-            AppointmentId = _appointmentId;
+
+            AppointmentId = appointmentId;
+
             Load += (_, _) => ViewLoaded?.Invoke(this, EventArgs.Empty);
             btnConfirm.Click += (_, _) => ConfirmRequested?.Invoke(this, EventArgs.Empty);
             btnCancel.Click += (_, _) => CancelRequested?.Invoke(this, EventArgs.Empty);
+
             InitializePresenter();
         }
 

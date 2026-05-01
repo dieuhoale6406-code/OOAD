@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using OOAD.Data;
 using OOAD.Model;
 
@@ -14,17 +15,25 @@ namespace OOAD.Repository
 
         public IEnumerable<Calendars> GetAll()
         {
-            return _context.Set<Calendars>().ToList();
+            return _context.Set<Calendars>()
+                .Include(c => c.User)
+                .Include(c => c.Appointments)
+                .ToList();
         }
 
         public Calendars? GetById(Guid calendarId)
         {
-            return _context.Set<Calendars>().Find(calendarId);
+            return _context.Set<Calendars>()
+                .Include(c => c.User)
+                .Include(c => c.Appointments)
+                .FirstOrDefault(c => c.CalendarId == calendarId);
         }
 
         public Calendars? GetByUserId(Guid userId)
         {
-            return _context.Set<Calendars>().FirstOrDefault(c => c.UserId == userId);
+            return _context.Set<Calendars>()
+                .Include(c => c.Appointments)
+                .FirstOrDefault(c => c.UserId == userId);
         }
 
         public void Add(Calendars calendar)
@@ -42,10 +51,9 @@ namespace OOAD.Repository
         public void Delete(Guid calendarId)
         {
             var calendar = GetById(calendarId);
+
             if (calendar == null)
-            {
                 return;
-            }
 
             _context.Set<Calendars>().Remove(calendar);
             _context.SaveChanges();

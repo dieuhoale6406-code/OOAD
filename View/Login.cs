@@ -11,7 +11,7 @@ namespace OOAD
 
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        public string UserIdText
+        public string EmailText
         {
             get => txtName.Text;
             set => txtName.Text = value;
@@ -32,17 +32,19 @@ namespace OOAD
         public Login()
         {
             InitializeComponent();
+
             btnOK.Click += (_, _) => LoginRequested?.Invoke(this, EventArgs.Empty);
             btnReset.Click += (_, _) => ResetRequested?.Invoke(this, EventArgs.Empty);
             btnCancel.Click += (_, _) => CancelRequested?.Invoke(this, EventArgs.Empty);
+
             InitializePresenter();
         }
 
         private void InitializePresenter()
         {
             var dbContext = new AppDBContext();
-            var userRepository = new UserRepository(dbContext);
-            var authService = new AuthService(userRepository);
+            var userRepo = new UserRepository(dbContext);
+            var authService = new AuthService(userRepo);
 
             _presenter = new LoginPresenter(this, authService);
             _presenter.Initialize();
@@ -68,6 +70,11 @@ namespace OOAD
         public void CloseView()
         {
             Close();
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

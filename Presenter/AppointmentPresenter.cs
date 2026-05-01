@@ -9,6 +9,10 @@ namespace OOAD.Presenter
         private readonly Appointment _view;
         private readonly AppointmentService _appointmentService;
         private readonly ReminderService _reminderService;
+        private readonly ConflictService _conflictService;
+        private readonly GroupMeetingService _groupMeetingService;
+
+        private readonly Guid _userId;
         private readonly Guid _calendarId;
         private Guid? _appointmentId;
 
@@ -16,12 +20,18 @@ namespace OOAD.Presenter
             Appointment view,
             AppointmentService appointmentService,
             ReminderService reminderService,
+            ConflictService conflictService,
+            GroupMeetingService groupMeetingService,
+            Guid userId,
             Guid calendarId,
             Guid? appointmentId)
         {
             _view = view;
             _appointmentService = appointmentService;
             _reminderService = reminderService;
+            _conflictService = conflictService;
+            _groupMeetingService = groupMeetingService;
+            _userId = userId;
             _calendarId = calendarId;
             _appointmentId = appointmentId;
         }
@@ -41,13 +51,9 @@ namespace OOAD.Presenter
             _view.AppointmentId = _appointmentId;
 
             if (!_appointmentId.HasValue)
-            {
                 return;
-            }
 
-            var appointment = _appointmentService
-                .GetAppointmentsByCalendarId(_calendarId)
-                .FirstOrDefault(a => a.AppointmentId == _appointmentId.Value);
+            var appointment = _appointmentService.GetById(_appointmentId.Value);
 
             if (appointment == null)
             {
@@ -59,6 +65,7 @@ namespace OOAD.Presenter
             _view.Location = appointment.Location;
             _view.StartTime = appointment.StartTime;
             _view.EndTime = appointment.EndTime;
+
             LoadReminders(appointment.AppointmentId);
         }
 
@@ -76,28 +83,63 @@ namespace OOAD.Presenter
                 return;
             }
 
-            if (_appointmentId.HasValue)
-            {
-                _appointmentService.DeleteAppointment(_appointmentId.Value);
-            }
-
-            _appointmentService.CreateAppointment(new AppointmentCreateDto
+            var dto = new AppointmentCreateDto
             {
                 CalendarId = _calendarId,
-                Name = _view.AppointmentName,
-                Location = _view.Location,
+                Name = _view.AppointmentName.Trim(),
+                Location = _view.Location.Trim(),
                 StartTime = _view.StartTime,
                 EndTime = _view.EndTime
-            });
+            };
 
-            var newest = _appointmentService
-                .GetAppointmentsByCalendarId(_calendarId)
-                .OrderByDescending(a => a.StartTime)
-                .FirstOrDefault(a => a.Name == _view.AppointmentName && a.Location == _view.Location);
+            if (_appointmentId.HasValue)
+            {
+                _appointmentService.UpdateAppointment(_appointmentId.Value, dto);
+                _view.ShowMessage("Cập nhật cuộc hẹn thành công.");
+                return;
+            }
 
-            _appointmentId = newest?.AppointmentId;
-            _view.AppointmentId = _appointmentId;
-            _view.ShowMessage("Lưu cuộc hẹn thành công.");
+            var createdAppointment = _appointmentService.CreateAppointment(dto);
+
+            _appointmentId = createdAppointment.AppointmentId;
+            _view.AppointmentId = createdAppointment.AppointmentId;
+
+            var conflictResult = _conflictService.ResolveConflict(createdAppointment.AppointmentId);
+
+            if (conflictResult.HasConflict)
+            {
+                _view.OpenConflictResolution(createdAppointment.AppointmentId);
+
+                var stillExists = _appointmentService.GetById(createdAppointment.AppointmentId) != null;
+
+                if (!stillExists)
+                {
+                    _view.ShowMessage("Cuộc hẹn mới đã bị hủy. Vui lòng chọn thời gian khác.");
+                    return;
+                }
+            }
+
+            var matchedGroupMeeting = _groupMeetingService.FindMatchingGroupMeeting(
+                createdAppointment.Name,
+                createdAppointment.StartTime,
+                createdAppointment.EndTime);
+
+            if (matchedGroupMeeting != null)
+            {
+                _view.OpenGroupMeetingSuggestion(
+                    _userId,
+                    createdAppointment.AppointmentId,
+                    createdAppointment.Name,
+                    createdAppointment.StartTime,
+                    createdAppointment.EndTime);
+
+                var stillExists = _appointmentService.GetById(createdAppointment.AppointmentId) != null;
+
+                if (!stillExists)
+                    return;
+            }
+
+            _view.ShowMessage("Thêm cuộc hẹn thành công.");
         }
 
         private void OnAddReminderRequested(object? sender, EventArgs e)
@@ -109,6 +151,7 @@ namespace OOAD.Presenter
             }
 
             var reminderTime = CalculateReminderTime(_view.StartTime, _view.ReminderType);
+
             var reminder = new Reminders
             {
                 ReminderId = Guid.NewGuid(),
@@ -131,6 +174,7 @@ namespace OOAD.Presenter
             }
 
             var reminderId = _view.SelectedReminderId;
+
             if (!reminderId.HasValue)
             {
                 _view.ShowError("Vui lòng chọn reminder để xóa.");

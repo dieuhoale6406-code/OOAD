@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OOAD.Data;
 
@@ -11,9 +12,11 @@ using OOAD.Data;
 namespace OOAD.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260501153116_UpdateUserEmailAndAppointmentName")]
+    partial class UpdateUserEmailAndAppointmentName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,33 +79,6 @@ namespace OOAD.Migrations
                         .IsUnique();
 
                     b.ToTable("Calendars");
-
-                    b.HasData(
-                        new
-                        {
-                            CalendarId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            UserId = new Guid("11111111-1111-1111-1111-111111111111")
-                        },
-                        new
-                        {
-                            CalendarId = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-                            UserId = new Guid("22222222-2222-2222-2222-222222222222")
-                        },
-                        new
-                        {
-                            CalendarId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"),
-                            UserId = new Guid("33333333-3333-3333-3333-333333333333")
-                        },
-                        new
-                        {
-                            CalendarId = new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"),
-                            UserId = new Guid("44444444-4444-4444-4444-444444444444")
-                        },
-                        new
-                        {
-                            CalendarId = new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
-                            UserId = new Guid("55555555-5555-5555-5555-555555555555")
-                        });
                 });
 
             modelBuilder.Entity("OOAD.Model.Reminders", b =>
@@ -175,48 +151,6 @@ namespace OOAD.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Email = "nnguyenlinh33662222@gmail.com",
-                            FullName = "Nguyễn Đỗ Khánh Linh",
-                            PasswordHash = "8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92",
-                            PhoneNumber = "0900000001"
-                        },
-                        new
-                        {
-                            UserId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            Email = "ntctuyen06@gmail.com",
-                            FullName = "Nguyễn Thị Cẩm Tuyền",
-                            PasswordHash = "8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92",
-                            PhoneNumber = "0900000002"
-                        },
-                        new
-                        {
-                            UserId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            Email = "dieuhoale6406@gmail.com",
-                            FullName = "Lê Thị Diệu Hòa",
-                            PasswordHash = "8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92",
-                            PhoneNumber = "0900000003"
-                        },
-                        new
-                        {
-                            UserId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            Email = "vanngocnhuy30032006@gmail.com",
-                            FullName = "Văn Ngọc Như Ý",
-                            PasswordHash = "8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92",
-                            PhoneNumber = "0900000004"
-                        },
-                        new
-                        {
-                            UserId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            Email = "nguyenvanan@gmail.com",
-                            FullName = "Nguyễn Văn An",
-                            PasswordHash = "8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92",
-                            PhoneNumber = "0900000005"
-                        });
                 });
 
             modelBuilder.Entity("OOAD.Model.GroupMeetings", b =>

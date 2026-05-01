@@ -23,30 +23,37 @@ namespace OOAD.Presenter
 
         private void OnLoginRequested(object? sender, EventArgs e)
         {
-            if (!Guid.TryParse(_view.UserIdText, out var userId))
+            if (string.IsNullOrWhiteSpace(_view.EmailText))
             {
-                _view.ShowError("UserId phải là GUID hợp lệ.");
+                _view.ShowError("Vui lòng nhập email.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(_view.PasswordText))
+            {
+                _view.ShowError("Vui lòng nhập mật khẩu.");
                 return;
             }
 
             var user = _authService.Login(new LoginRequestDto
             {
-                UserId = userId
+                Email = _view.EmailText.Trim(),
+                Password = _view.PasswordText
             });
 
             if (user == null)
             {
-                _view.ShowError("Không tìm thấy user.");
+                _view.ShowError("Email hoặc mật khẩu không đúng.");
                 return;
             }
 
-            _view.ShowMessage("Đăng nhập thành công.");
+            _view.ShowMessage($"Đăng nhập thành công! Xin chào {user.FullName}.");
             _view.OpenMainCalendar(user.UserId);
         }
 
         private void OnResetRequested(object? sender, EventArgs e)
         {
-            _view.UserIdText = string.Empty;
+            _view.EmailText = string.Empty;
             _view.PasswordText = string.Empty;
         }
 

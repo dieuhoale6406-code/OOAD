@@ -1,4 +1,4 @@
-using OOAD.DTOs;
+﻿using OOAD.DTOs;
 using OOAD.Repository;
 
 namespace OOAD.Service
@@ -15,25 +15,32 @@ namespace OOAD.Service
         public ConflictResolutionDto ResolveConflict(Guid appointmentId)
         {
             var current = _appointmentRepository.GetById(appointmentId);
+
             if (current == null)
             {
                 return new ConflictResolutionDto
                 {
                     HasConflict = false,
-                    Message = "Appointment not found"
+                    Message = "Không tìm thấy cuộc hẹn cần kiểm tra.",
+                    ConflictedAppointmentIds = new List<Guid>()
                 };
             }
 
-            var conflicts = _appointmentRepository.GetByCalendarId(current.CalendarId)
-                .Where(a => a.AppointmentId != current.AppointmentId)
-                .Where(a => a.StartTime < current.EndTime && current.StartTime < a.EndTime)
+            var conflicts = _appointmentRepository.GetConflictedAppointments(
+                    current.CalendarId,
+                    current.StartTime,
+                    current.EndTime,
+                    current.AppointmentId
+                )
                 .Select(a => a.AppointmentId)
                 .ToList();
 
             return new ConflictResolutionDto
             {
                 HasConflict = conflicts.Count > 0,
-                Message = conflicts.Count > 0 ? "Conflict detected" : "No conflict",
+                Message = conflicts.Count > 0
+                    ? "Thời gian này đã có cuộc hẹn khác. Bạn muốn thay thế cuộc hẹn cũ hay chọn thời gian khác?"
+                    : "Không có xung đột thời gian.",
                 ConflictedAppointmentIds = conflicts
             };
         }
