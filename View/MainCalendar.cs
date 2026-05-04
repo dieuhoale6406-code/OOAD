@@ -1,16 +1,14 @@
 ﻿using OOAD.Model;
 using OOAD.Presenter;
-using OOAD.Data;
-using OOAD.Repository;
-using OOAD.Service;
 
 namespace OOAD
 {
     public partial class MainCalendar : Form
     {
-        private MainCalendarPresenter? _presenter;
+        private MainCalendarPresenter _presenter;
         private readonly Guid _userId;
 
+        #region Properties for Presenter Binding
         public DateTime SelectedDate => monthCalendar1.SelectionStart.Date;
         public bool ShowAllAppointments => checkBox1.Checked;
 
@@ -18,30 +16,29 @@ namespace OOAD
         {
             get
             {
-                if (dataGridView1.CurrentRow?.DataBoundItem == null)
+                if (dgvAppointment.CurrentRow == null)
                     return null;
-
-                var value = dataGridView1.CurrentRow.Cells["AppointmentId"].Value?.ToString();
-
-                return Guid.TryParse(value, out var id) ? id : null;
+                return Guid.TryParse(dgvAppointment.CurrentRow.Cells["AppointmentId"].Value?.ToString(), out var id) ? id : null;
             }
         }
+        #endregion
 
+        #region Events (View -> Presenter)
         public event EventHandler? ViewLoaded;
         public event EventHandler? SelectedDateChanged;
         public event EventHandler? ShowAllAppointmentsChanged;
         public event EventHandler? AddRequested;
         public event EventHandler? UpdateRequested;
         public event EventHandler? DeleteRequested;
+        #endregion
 
         public MainCalendar(Guid userId)
         {
             InitializeComponent();
-
             _userId = userId;
+            _presenter = new MainCalendarPresenter(this, _userId);
 
             Load += (_, _) => ViewLoaded?.Invoke(this, EventArgs.Empty);
-
             monthCalendar1.DateSelected += (_, _) =>
             {
                 label1.Text = $"Choosing Date: {SelectedDate:dd/MM/yyyy}";
@@ -53,26 +50,12 @@ namespace OOAD
             btnUpdate.Click += (_, _) => UpdateRequested?.Invoke(this, EventArgs.Empty);
             btnDelete.Click += (_, _) => DeleteRequested?.Invoke(this, EventArgs.Empty);
 
-            InitializePresenter();
-        }
-
-        private void InitializePresenter()
-        {
-            var dbContext = new AppDBContext();
-
-            var calendarRepository = new CalendarRepository(dbContext);
-            var appointmentRepository = new AppointmentRepository(dbContext);
-
-            var calendarService = new CalendarService(calendarRepository);
-            var appointmentService = new AppointmentService(appointmentRepository);
-
-            _presenter = new MainCalendarPresenter(this, calendarService, appointmentService, _userId);
             _presenter.Initialize();
         }
 
         public void BindAppointments(IEnumerable<Appointments> appointments)
         {
-            dataGridView1.DataSource = appointments
+            dgvAppointment.DataSource = appointments
                 .Select(a => new
                 {
                     a.AppointmentId,
@@ -84,35 +67,33 @@ namespace OOAD
                 .OrderBy(a => a.StartTime)
                 .ToList();
 
-            if (dataGridView1.Columns["AppointmentId"] != null)
+            if (dgvAppointment.Columns["AppointmentId"] != null)
+                dgvAppointment.Columns["AppointmentId"]?.Visible = false;
+
+            if (dgvAppointment.Columns["Name"] != null)
             {
-                dataGridView1.Columns["AppointmentId"].Visible = false;
+                dgvAppointment.Columns["Name"]?.HeaderText = "Tên cuộc hẹn";
+                dgvAppointment.Columns["Name"]?.Width = 160;
             }
 
-            if (dataGridView1.Columns["Name"] != null)
+            if (dgvAppointment.Columns["Location"] != null)
             {
-                dataGridView1.Columns["Name"].HeaderText = "Tên cuộc hẹn";
-                dataGridView1.Columns["Name"].Width = 160;
+                dgvAppointment.Columns["Location"]?.HeaderText = "Địa điểm";
+                dgvAppointment.Columns["Location"]?.Width = 130;
             }
 
-            if (dataGridView1.Columns["Location"] != null)
+            if (dgvAppointment.Columns["StartTime"] != null)
             {
-                dataGridView1.Columns["Location"].HeaderText = "Địa điểm";
-                dataGridView1.Columns["Location"].Width = 130;
+                dgvAppointment.Columns["StartTime"]?.HeaderText = "Bắt đầu";
+                dgvAppointment.Columns["StartTime"]?.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dgvAppointment.Columns["StartTime"]?.Width = 140;
             }
 
-            if (dataGridView1.Columns["StartTime"] != null)
+            if (dgvAppointment.Columns["EndTime"] != null)
             {
-                dataGridView1.Columns["StartTime"].HeaderText = "Bắt đầu";
-                dataGridView1.Columns["StartTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                dataGridView1.Columns["StartTime"].Width = 140;
-            }
-
-            if (dataGridView1.Columns["EndTime"] != null)
-            {
-                dataGridView1.Columns["EndTime"].HeaderText = "Kết thúc";
-                dataGridView1.Columns["EndTime"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                dataGridView1.Columns["EndTime"].Width = 140;
+                dgvAppointment.Columns["EndTime"]?.HeaderText = "Kết thúc";
+                dgvAppointment.Columns["EndTime"]?.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dgvAppointment.Columns["EndTime"]?.Width = 140;
             }
         }
 
@@ -139,7 +120,7 @@ namespace OOAD
 
         public void OpenAppointmentForm(Guid calendarId, Guid? appointmentId, DateTime selectedDate)
         {
-            using var form = new Appointment(_userId, calendarId, appointmentId, selectedDate);
+            var form = new Appointment(_userId, calendarId, appointmentId, selectedDate);
             form.ShowDialog(this);
         }
 

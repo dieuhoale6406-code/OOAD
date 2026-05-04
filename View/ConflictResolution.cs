@@ -1,13 +1,10 @@
-﻿using OOAD.Presenter;
-using OOAD.Data;
-using OOAD.Repository;
-using OOAD.Service;
+using OOAD.Presenter;
 
 namespace OOAD
 {
     public partial class ConflictResolution : Form
     {
-        private ConflictResolutionPresenter? _presenter;
+        private ConflictResolutionPresenter _presenter;
 
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
@@ -19,9 +16,12 @@ namespace OOAD
         public event EventHandler? ConfirmRequested;
         public event EventHandler? CancelRequested;
 
-        public ConflictResolution(Guid appointmentId)
+        public ConflictResolution(ConflictResolutionPresenter presenter, Guid appointmentId)
         {
             InitializeComponent();
+
+            _presenter = presenter;
+            _presenter.AttachView(this);
 
             AppointmentId = appointmentId;
 
@@ -29,19 +29,22 @@ namespace OOAD
             btnConfirm.Click += (_, _) => ConfirmRequested?.Invoke(this, EventArgs.Empty);
             btnCancel.Click += (_, _) => CancelRequested?.Invoke(this, EventArgs.Empty);
 
-            InitializePresenter();
+            _presenter.Initialize();
+        }
+
+        public ConflictResolution(ConflictResolutionPresenter presenter, List<Guid> conflictedAppointmentIds)
+        {
+            InitializeComponent();
+
+            _presenter = presenter;
+            _presenter.AttachView(this);
+
+            AppointmentId = Guid.Empty;
+            BindConflicts(conflictedAppointmentIds);
         }
 
         private void InitializePresenter()
         {
-            var dbContext = new AppDBContext();
-            var appointmentRepository = new AppointmentRepository(dbContext);
-
-            var conflictService = new ConflictService(appointmentRepository);
-            var appointmentService = new AppointmentService(appointmentRepository);
-
-            _presenter = new ConflictResolutionPresenter(this, conflictService, appointmentService);
-            _presenter.Initialize();
         }
 
         public void ShowConflictMessage(string message)

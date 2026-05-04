@@ -14,6 +14,6 @@ namespace OOAD.Model
         public DateTime StartTime { get; set; } = DateTime.Now;
         public DateTime EndTime { get; set; } = DateTime.Now;
         public Calendars Calendar { get; set; } = null!;
-        public List<Reminders> Reminders { get; set; } = new List<Reminders>();
+        public List<Reminders> Reminders { get; set; } = null!;
     }
 }

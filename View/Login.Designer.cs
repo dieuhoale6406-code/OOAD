@@ -65,7 +65,6 @@
             txtName.Name = "txtName";
             txtName.Size = new Size(347, 31);
             txtName.TabIndex = 2;
-            txtName.TextChanged += txtName_TextChanged;
             // 
             // txtPass
             // 

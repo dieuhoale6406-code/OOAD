@@ -1,4 +1,4 @@
-﻿namespace OOAD
+namespace OOAD
 {
     partial class ConflictResolution
     {

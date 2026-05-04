@@ -29,59 +29,57 @@
         private void InitializeComponent()
         {
             monthCalendar1 = new MonthCalendar();
-            dataGridView1 = new DataGridView();
+            dgvAppointment = new DataGridView();
             btnAdd = new Button();
             btnUpdate = new Button();
             btnDelete = new Button();
             label1 = new Label();
             label2 = new Label();
             checkBox1 = new CheckBox();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvAppointment).BeginInit();
             SuspendLayout();
             // 
             // monthCalendar1
             // 
-            monthCalendar1.Location = new Point(30, 35);
-            monthCalendar1.Margin = new Padding(7);
+            monthCalendar1.Location = new Point(39, 45);
             monthCalendar1.Name = "monthCalendar1";
             monthCalendar1.TabIndex = 0;
+            monthCalendar1.TodayDate = new DateTime(2026, 5, 4, 0, 0, 0, 0);
             // 
-            // dataGridView1
+            // dgvAppointment
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(392, 65);
-            dataGridView1.Margin = new Padding(2);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 82;
-            dataGridView1.Size = new Size(643, 217);
-            dataGridView1.TabIndex = 1;
+            dgvAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvAppointment.Location = new Point(510, 83);
+            dgvAppointment.Name = "dgvAppointment";
+            dgvAppointment.ReadOnly = true;
+            dgvAppointment.RowHeadersWidth = 82;
+            dgvAppointment.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvAppointment.Size = new Size(836, 278);
+            dgvAppointment.TabIndex = 1;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(392, 329);
-            btnAdd.Margin = new Padding(2);
+            btnAdd.Location = new Point(510, 421);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(120, 45);
+            btnAdd.Size = new Size(156, 58);
             btnAdd.TabIndex = 2;
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = true;
             // 
             // btnUpdate
             // 
-            btnUpdate.Location = new Point(675, 329);
-            btnUpdate.Margin = new Padding(2);
+            btnUpdate.Location = new Point(877, 421);
             btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(120, 45);
+            btnUpdate.Size = new Size(156, 58);
             btnUpdate.TabIndex = 3;
             btnUpdate.Text = "Update";
             btnUpdate.UseVisualStyleBackColor = true;
             // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(915, 329);
-            btnDelete.Margin = new Padding(2);
+            btnDelete.Location = new Point(1190, 421);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(120, 45);
+            btnDelete.Size = new Size(156, 58);
             btnDelete.TabIndex = 4;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = true;
@@ -90,51 +88,47 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(30, 310);
-            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Location = new Point(39, 397);
             label1.Name = "label1";
-            label1.Size = new Size(182, 25);
+            label1.Size = new Size(243, 32);
             label1.TabIndex = 5;
             label1.Text = "Choosing Date: None";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(392, 25);
-            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Location = new Point(510, 32);
             label2.Name = "label2";
-            label2.Size = new Size(199, 25);
+            label2.Size = new Size(269, 32);
             label2.TabIndex = 6;
             label2.Text = "Danh sách các buổi hẹn";
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(392, 287);
-            checkBox1.Margin = new Padding(2);
+            checkBox1.Location = new Point(510, 367);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(281, 29);
+            checkBox1.Size = new Size(380, 36);
             checkBox1.TabIndex = 7;
             checkBox1.Text = "Hiển thị tất cả cuộc hẹn của tôi";
             checkBox1.UseVisualStyleBackColor = true;
             // 
             // MainCalendar
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1098, 451);
+            ClientSize = new Size(1427, 577);
             Controls.Add(checkBox1);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(btnDelete);
             Controls.Add(btnUpdate);
             Controls.Add(btnAdd);
-            Controls.Add(dataGridView1);
+            Controls.Add(dgvAppointment);
             Controls.Add(monthCalendar1);
-            Margin = new Padding(2);
             Name = "MainCalendar";
             Text = "MainCalendar";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvAppointment).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -142,7 +136,7 @@
         #endregion
 
         private MonthCalendar monthCalendar1;
-        private DataGridView dataGridView1;
+        private DataGridView dgvAppointment;
         private Button btnAdd;
         private Button btnUpdate;
         private Button btnDelete;

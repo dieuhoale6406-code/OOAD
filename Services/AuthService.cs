@@ -1,28 +1,32 @@
+using OOAD.Data;
 using OOAD.DTOs;
 using OOAD.Model;
 using OOAD.Repository;
 using OOAD.Utils;
 
-namespace OOAD.Service
+namespace OOAD.Services
 {
     public class AuthService
     {
+        private readonly AppDBContext _context;
         private readonly UserRepository _userRepository;
 
-        public AuthService(UserRepository userRepository)
+        public AuthService(AppDBContext context)
         {
-            _userRepository = userRepository;
+            _context = context;
+            _userRepository = new UserRepository(_context);
         }
 
         public Users? Login(LoginRequestDto request)
         {
             if (request == null)
                 return null;
-
             if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
                 return null;
 
-            var user = _userRepository.GetByEmail(request.Email);
+            var normalizedEmail = request.Email.Trim().ToLower();
+            var user = _userRepository.Query
+                .FirstOrDefault(u => u.Email.ToLower() == normalizedEmail);
             if (user == null)
                 return null;
 

@@ -1,5 +1,6 @@
+using OOAD.Data;
 using OOAD.DTOs;
-using OOAD.Service;
+using OOAD.Services;
 
 namespace OOAD.Presenter
 {
@@ -8,10 +9,11 @@ namespace OOAD.Presenter
         private readonly Login _view;
         private readonly AuthService _authService;
 
-        public LoginPresenter(Login view, AuthService authService)
+        public LoginPresenter(Login view)
         {
             _view = view;
-            _authService = authService;
+            var context = new AppDBContext();
+            _authService = new AuthService(context);
         }
 
         public void Initialize()
@@ -37,7 +39,7 @@ namespace OOAD.Presenter
 
             var user = _authService.Login(new LoginRequestDto
             {
-                Email = _view.EmailText.Trim(),
+                Email = _view.EmailText,
                 Password = _view.PasswordText
             });
 
