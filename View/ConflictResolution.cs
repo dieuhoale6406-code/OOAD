@@ -16,11 +16,11 @@ namespace OOAD
         public event EventHandler? ConfirmRequested;
         public event EventHandler? CancelRequested;
 
-        public ConflictResolution(ConflictResolutionPresenter presenter, Guid appointmentId)
+        public ConflictResolution(Guid appointmentId)
         {
             InitializeComponent();
 
-            _presenter = presenter;
+            _presenter = new ConflictResolutionPresenter(this);
             _presenter.AttachView(this);
 
             AppointmentId = appointmentId;

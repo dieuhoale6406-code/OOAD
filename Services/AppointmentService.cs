@@ -63,7 +63,7 @@ namespace OOAD.Services
                 _reminderRepository.SaveChanges();
                 return ServiceResult<bool>.Ok();
             }
-            return ServiceResult<bool>.Fail("Reminder not found.");
+            return ServiceResult<bool>.Fail("không tìm thấy reminder");
         }
 
         public int GetReminderMinutes(string reminderType)
@@ -87,7 +87,6 @@ namespace OOAD.Services
             var errorMessage = Validate(dto);
             if (!string.IsNullOrWhiteSpace(errorMessage))
                 return ServiceResult<Guid>.Fail(errorMessage);
-
             var conflicts = FindConflicts(dto);
             if (conflicts.Count > 0)
             {
@@ -97,7 +96,7 @@ namespace OOAD.Services
                 {
                     if (IsGroupMeeting(conflict.AppointmentId))
                     {
-                        RemoveUserFromGroup(dto.UserId, conflict.AppointmentId);
+                        _userGroupRepository.Remove(dto.UserId, conflict.AppointmentId);
                         CleanupGroupIfEmpty(conflict.AppointmentId);
                     }
                     else
@@ -117,7 +116,7 @@ namespace OOAD.Services
                     return ServiceResult<Guid>.Ok(matchedGroup.AppointmentId, "Đã tham gia cuộc họp nhóm.");
                 return ServiceResult<Guid>.Fail("Không thể tham gia cuộc họp nhóm.");
             }
-            var appointment = dto.AppointmentId != Guid.Empty && dto.AppointmentId != default
+            var appointment = dto.AppointmentId != Guid.Empty
                 ? _appointmentRepository.GetById(dto.AppointmentId)
                 : null;
             if (appointment == null)
@@ -135,57 +134,44 @@ namespace OOAD.Services
             appointment.StartTime = dto.StartTime;
             appointment.EndTime = dto.EndTime;
 
-            if (dto.HasReminder)
+            var existingReminders = _reminderRepository.GetRemindersByAppointmentId(appointment.AppointmentId).ToList();
+            foreach (var reminder in existingReminders)
+                _reminderRepository.Remove(reminder);
+
+            if (dto.Reminders != null)
             {
-
-                foreach (var reminder in _reminderRepository.GetRemindersByAppointmentId(appointment.AppointmentId))
-                    _reminderRepository.Remove(reminder);
-
-                var reminderMinutes = Math.Abs(dto.ReminderMinutesBefore);
-                var reminderTime = dto.StartTime.AddMinutes(-reminderMinutes);
-
-                _reminderRepository.Add(new Reminders
+                foreach (var reminderDto in dto.Reminders)
                 {
-                    ReminderId = Guid.NewGuid(),
-                    AppointmentId = appointment.AppointmentId,
-                    ReminderTime = reminderTime,
-                    Type = BuildReminderType(reminderMinutes),
-                    Message = $"Nhắc nhở: {appointment.Name}"
-                });
+                    _reminderRepository.Add(new Reminders
+                    {
+                        ReminderId = Guid.NewGuid(),
+                        AppointmentId = appointment.AppointmentId,
+                        ReminderTime = reminderDto.ReminderTime,
+                        Type = reminderDto.Type,
+                        Message = $"Nhắc nhở: {appointment.Name}"
+                    });
+                }
             }
+
             _appointmentRepository.SaveChanges();
             return ServiceResult<Guid>.Ok(appointment.AppointmentId, "Lưu thành công.");
         }
 
         public ServiceResult<Guid> DeleteAppointment(Guid appointmentId, Guid userId)
         {
-            using var transaction = _appointmentRepository.BeginTransaction();
-            try
+            if (IsGroupMeeting(appointmentId))
             {
-                if (IsGroupMeeting(appointmentId))
-                {
-                    RemoveUserFromGroup(userId, appointmentId);
-                    CleanupGroupIfEmpty(appointmentId);
-                }
-                else
-                {
-                    _appointmentRepository.Remove(appointmentId);
-                }
-
-                _appointmentRepository.SaveChanges();
-                transaction.Commit();
-
-                return ServiceResult<Guid>.Ok("Đã xóa thành công.");
+                _userGroupRepository.Remove(userId, appointmentId);
+                CleanupGroupIfEmpty(appointmentId);
             }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                return ServiceResult<Guid>.Fail(ex.Message);
-            }
+            else
+                _appointmentRepository.Remove(appointmentId);
+
+            _appointmentRepository.SaveChanges();
+            return ServiceResult<Guid>.Ok("Đã xóa thành công.");
         }
 
         #region Private Helpers
-
         private static string? Validate(AppointmentDto dto)
         {
             if (dto.CalendarId == Guid.Empty)
@@ -204,7 +190,7 @@ namespace OOAD.Services
                             && a.StartTime < dto.EndTime
                             && dto.StartTime < a.EndTime);
 
-            if (dto.AppointmentId != Guid.Empty && dto.AppointmentId != default)
+            if (dto.AppointmentId != Guid.Empty)
                 conflicts = conflicts.Where(a => a.AppointmentId != dto.AppointmentId);
 
             var result = conflicts.ToList();
@@ -223,22 +209,15 @@ namespace OOAD.Services
                                     && g.StartTime < dto.EndTime
                                     && dto.StartTime < g.EndTime)
                         .ToList();
-
-                    foreach (var gc in groupConflicts)
-                    {
-                        if (result.All(r => r.AppointmentId != gc.AppointmentId))
-                            result.Add(gc);
-                    }
+                    result.AddRange(groupConflicts);
                 }
             }
-
             return result;
         }
 
         private bool JoinGroupMeeting(Guid userId, Guid groupMeetingId)
         {
             if (userId == Guid.Empty || groupMeetingId == Guid.Empty) return false;
-
             if (_userGroupRepository.Query.Any(ug => ug.UserId == userId && ug.GroupMeetingId == groupMeetingId))
                 return true;
             _userGroupRepository.Add(new UserGroupMeetings
@@ -247,15 +226,6 @@ namespace OOAD.Services
                 GroupMeetingId = groupMeetingId
             });
             return true;
-        }
-
-        private void RemoveUserFromGroup(Guid userId, Guid groupMeetingId)
-        {
-            var link = _userGroupRepository.Query
-                .FirstOrDefault(ug => ug.UserId == userId && ug.GroupMeetingId == groupMeetingId);
-
-            if (link != null)
-                _userGroupRepository.Remove(link);
         }
 
         private void CleanupGroupIfEmpty(Guid groupMeetingId)
@@ -271,22 +241,6 @@ namespace OOAD.Services
         private bool IsGroupMeeting(Guid appointmentId)
         {
             return _groupMeetingRepository.Query.Any(g => g.AppointmentId == appointmentId);
-        }
-
-        private static string BuildReminderType(int minutes)
-        {
-            return minutes switch
-            {
-                15 => "Trước 15 phút",
-                30 => "Trước 30 phút",
-                60 => "Trước 1 tiếng",
-                120 => "Trước 2 tiếng",
-                1440 => "Trước 1 ngày",
-                2880 => "Trước 2 ngày",
-                10080 => "Trước 1 tuần",
-                20160 => "Trước 2 tuần",
-                _ => $"Trước {minutes} phút"
-            };
         }
 
         #endregion

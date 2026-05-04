@@ -148,6 +148,8 @@
             // 
             // listView1
             // 
+            listView1.FullRowSelect = true;
+            listView1.GridLines = true;
             listView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             listView1.Location = new Point(29, 570);
             listView1.Name = "listView1";

@@ -1,3 +1,4 @@
+using OOAD.Data;
 using OOAD.Services;
 
 namespace OOAD.Presenter
@@ -7,12 +8,11 @@ namespace OOAD.Presenter
         private ConflictResolution _view;
         private AppointmentService _appointmentService;
 
-        public ConflictResolutionPresenter(
-            ConflictResolution view,
-            AppointmentService appointmentService)
+        public ConflictResolutionPresenter(ConflictResolution view)
         {
             _view = view;
-            _appointmentService = appointmentService;
+            var context = new AppDBContext();
+            _appointmentService = new AppointmentService(context);
         }
 
         public void AttachView(ConflictResolution view)

@@ -24,7 +24,6 @@ public class AppointmentDto
     public DateTime EndTime { get; set; } = DateTime.Now;
 
     public List<ReminderDto> Reminders { get; set; }
-    public int ReminderMinutesBefore { get; set; }
 
     public AppointmentDto() { }
 }

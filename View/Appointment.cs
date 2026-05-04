@@ -1,4 +1,5 @@
 ﻿using OOAD.DTOs;
+using OOAD.Model;
 using OOAD.Presenter;
 using System;
 using System.Collections.Generic;
@@ -71,7 +72,7 @@ namespace OOAD
             get
             {
                 var reminders = new List<ReminderDto>();
-                foreach (ListViewItem item in listView1.Items)
+                foreach (ListViewItem item in ReminderList.Items)
                 {
                     if (item.Tag is Guid id)
                     {
@@ -120,6 +121,8 @@ namespace OOAD
             listView1.Columns.Add("Type", 180);
             listView1.Columns.Add("Message", 220);
 
+            rBtnAppointment.Checked = true;
+
             StartTime = selectedDate.Date.AddHours(8);
             EndTime = selectedDate.Date.AddHours(9);
 
@@ -158,7 +161,11 @@ namespace OOAD
 
         public void CloseView() => this.Close();
 
-        public void TriggerConflictResolution(Guid id) => RequestOpenConflictForm?.Invoke(id);
+        public void TriggerConflictResolution(Guid appointmentId)
+        {
+            var form = new ConflictResolution(appointmentId);
+            form.ShowDialog(this);
+        }
         public void TriggerGroupSuggestion(Guid appId, string name, DateTime start, DateTime end) =>
             RequestOpenGroupForm?.Invoke(appId, name, start, end);
     }

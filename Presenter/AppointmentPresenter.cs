@@ -2,6 +2,7 @@ using OOAD.Model;
 using OOAD.Services;
 using OOAD.Data;
 using OOAD.Repository;
+using OOAD.DTOs;
 
 namespace OOAD.Presenter
 {
@@ -41,6 +42,7 @@ namespace OOAD.Presenter
         {
             _view.CalendarId = _calendarId;
             _view.AppointmentId = _appointmentId;
+            
 
             if (!_appointmentId.HasValue)
                 return;
@@ -74,7 +76,12 @@ namespace OOAD.Presenter
 
         private void OnAddReminderRequested(object? sender, EventArgs e)
         {
-
+            var reminderTime = CalculateReminderTime(_view.StartTime, _view.ReminderType);
+            var item = new ListViewItem(reminderTime.ToString());
+            item.SubItems.Add(_view.ReminderType);
+            item.SubItems.Add($"Reminder: {_view.AppointmentName}");
+            item.Tag = reminderTime;
+            _view.ReminderList.Items.Add(item);
         }
 
         private void OnDeleteReminderRequested(object? sender, EventArgs e)
@@ -106,8 +113,7 @@ namespace OOAD.Presenter
                 Location = _view.Location.Trim(),
                 StartTime = _view.StartTime,
                 EndTime = _view.EndTime,
-                Reminders = _view.Reminders,
-                ReminderMinutesBefore = _view.Reminders.Count > 0 ? _appointmentService.GetReminderMinutes(_view.ReminderType) : 0
+                Reminders = _view.Reminders
             };
         }
 
@@ -118,21 +124,17 @@ namespace OOAD.Presenter
                 case HandleStatus.Conflict:
                     if (_view.ConfirmOverwrite())
                     {
-                        // Đệ quy gọi lại với flag isOverwrite = true
                         var overwriteResult = _appointmentService.SaveAppointment(dto, isOverwrite: true);
                         HandleSaveResult(dto, overwriteResult);
                     }
                     break;
-
                 case HandleStatus.GroupDecision:
-                    if (_view.ConfirmJoinGroup())
+                    if (!_view.IsAppointment && _view.ConfirmJoinGroup())
                     {
-                        // Đệ quy gọi lại với flag joinGroup = true
                         var joinResult = _appointmentService.SaveAppointment(dto, joinGroup: true);
                         HandleSaveResult(dto, joinResult);
                     }
                     break;
-
                 case HandleStatus.Success:
                     if (result.Data != null && result.Data != Guid.Empty)
                     {
@@ -142,9 +144,7 @@ namespace OOAD.Presenter
                         LoadReminders(_appointmentId.Value);
                     }
                     else
-                    {
                         _view.ShowMessage(result.Message ?? "Thành công");
-                    }
                     break;
 
                 case HandleStatus.Error:
@@ -153,18 +153,30 @@ namespace OOAD.Presenter
             }
         }
 
-
         public void HandleOpenConflictForm(Guid appointmentId)
         {
-            var presenter = new ConflictResolutionPresenter(null, _appointmentService);
-            using var form = new ConflictResolution(presenter, appointmentId);
-            form.ShowDialog(_view);
+            _view.TriggerConflictResolution(appointmentId);
         }
 
         public void HandleOpenGroupForm(Guid appId, string name, DateTime start, DateTime end)
         {
             var form = new GroupMeetingSugestion(_userId, appId, name, start, end);
             form.ShowDialog(_view);
+        }
+        private static DateTime CalculateReminderTime(DateTime start, string reminderType)
+        {
+            return reminderType switch
+            {
+                "Trước 15 phút" => start.AddMinutes(-15),
+                "Trước 30 phút" => start.AddMinutes(-30),
+                "Trước 1 tiếng" => start.AddHours(-1),
+                "Trước 2 tiếng" => start.AddHours(-2),
+                "Trước 1 ngày" => start.AddDays(-1),
+                "Trước 2 ngày" => start.AddDays(-2),
+                "Trước 1 tuần" => start.AddDays(-7),
+                "Trước 2 tuần" => start.AddDays(-14),
+                _ => start.AddMinutes(-10)
+            };
         }
     }
 }
