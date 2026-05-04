@@ -32,7 +32,6 @@ namespace OOAD.Presenter
             _view.CancelRequested += (_, _) => _view.CloseView();
             _view.AddReminderRequested += OnAddReminderRequested;
             _view.DeleteReminderRequested += OnDeleteReminderRequested;
-            _view.RequestOpenConflictForm += HandleOpenConflictForm;
             _view.RequestOpenGroupForm += HandleOpenGroupForm;
 
             OnViewLoaded(this, EventArgs.Empty);
@@ -70,18 +69,50 @@ namespace OOAD.Presenter
         private void OnSaveRequested(object? sender, EventArgs e)
         {
             var appointmentDto = BuildDto();
-            var result = _appointmentService.SaveAppointment(appointmentDto);
+            var result = _appointmentService.SaveAppointment(appointmentDto, isGroupMode: _view.IsGroupMode);
             HandleSaveResult(appointmentDto, result);
         }
 
         private void OnAddReminderRequested(object? sender, EventArgs e)
         {
-            var reminderTime = CalculateReminderTime(_view.StartTime, _view.ReminderType);
-            var item = new ListViewItem(reminderTime.ToString());
-            item.SubItems.Add(_view.ReminderType);
-            item.SubItems.Add($"Reminder: {_view.AppointmentName}");
-            item.Tag = reminderTime;
+            if (string.IsNullOrWhiteSpace(_view.ReminderType) || _view.ReminderType == "Chọn thời gian")
+            {
+                _view.ShowError("Vui lòng chọn thời gian nhắc nhở.");
+                return;
+            }
+
+            var minutes = _appointmentService.GetReminderMinutes(_view.ReminderType);
+            var reminderTime = _view.StartTime.AddMinutes(-minutes);
+
+            // Kiểm tra thời gian reminder có hợp lệ không
+            if (reminderTime < DateTime.Now)
+            {
+                _view.ShowError("Thời gian nhắc nhở đã qua.");
+                return;
+            }
+
+            // Tạo reminder DTO mới
+            var newReminder = new ReminderDto
+            {
+                ReminderId = Guid.NewGuid(),
+                Type = _view.ReminderType,
+                Message = $"Nhắc nhở: {_view.AppointmentName}",
+                ReminderTime = reminderTime
+            };
+
+            // Thêm vào listView với Tag là ReminderId
+            var item = new ListViewItem(reminderTime.ToString("dd/MM/yyyy HH:mm"));
+            item.SubItems.Add(newReminder.Type);
+            item.SubItems.Add(newReminder.Message);
+            item.Tag = newReminder.ReminderId;
+
             _view.ReminderList.Items.Add(item);
+
+            // Clear selection để user có thể thêm reminder khác
+            foreach (ListViewItem i in _view.ReminderList.Items)
+            {
+                i.Selected = false;
+            }
         }
 
         private void OnDeleteReminderRequested(object? sender, EventArgs e)
@@ -129,9 +160,9 @@ namespace OOAD.Presenter
                     }
                     break;
                 case HandleStatus.GroupDecision:
-                    if (!_view.IsAppointment && _view.ConfirmJoinGroup())
+                    if (_view.IsGroupMode && _view.ConfirmJoinGroup())
                     {
-                        var joinResult = _appointmentService.SaveAppointment(dto, joinGroup: true);
+                        var joinResult = _appointmentService.SaveAppointment(dto, joinGroup: true, isGroupMode: _view.IsGroupMode);
                         HandleSaveResult(dto, joinResult);
                     }
                     break;
@@ -153,30 +184,10 @@ namespace OOAD.Presenter
             }
         }
 
-        public void HandleOpenConflictForm(Guid appointmentId)
-        {
-            _view.TriggerConflictResolution(appointmentId);
-        }
-
         public void HandleOpenGroupForm(Guid appId, string name, DateTime start, DateTime end)
         {
             var form = new GroupMeetingSugestion(_userId, appId, name, start, end);
             form.ShowDialog(_view);
-        }
-        private static DateTime CalculateReminderTime(DateTime start, string reminderType)
-        {
-            return reminderType switch
-            {
-                "Trước 15 phút" => start.AddMinutes(-15),
-                "Trước 30 phút" => start.AddMinutes(-30),
-                "Trước 1 tiếng" => start.AddHours(-1),
-                "Trước 2 tiếng" => start.AddHours(-2),
-                "Trước 1 ngày" => start.AddDays(-1),
-                "Trước 2 ngày" => start.AddDays(-2),
-                "Trước 1 tuần" => start.AddDays(-7),
-                "Trước 2 tuần" => start.AddDays(-14),
-                _ => start.AddMinutes(-10)
-            };
         }
     }
 }

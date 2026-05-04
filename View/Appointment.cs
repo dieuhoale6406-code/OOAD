@@ -80,7 +80,7 @@ namespace OOAD
                         {
                             Type = item.SubItems[1].Text,
                             Message = item.SubItems[2].Text,
-                            ReminderTime = DateTime.Parse(item.SubItems[0].Text)
+                            ReminderTime = DateTime.ParseExact(item.SubItems[0].Text, "dd/MM/yyyy HH:mm", null)
                         });
                     }
                 }
@@ -88,7 +88,7 @@ namespace OOAD
             }
         }
         public ListView ReminderList => listView1;
-        public bool IsAppointment => rBtnAppointment.Checked;
+        public bool IsGroupMode => rBtnGroupMeeting.Checked;
         #endregion
 
         #region Events (View -> Presenter)
@@ -143,6 +143,7 @@ namespace OOAD
                 var item = new ListViewItem(reminder.ReminderTime.ToString("dd/MM/yyyy HH:mm"));
                 item.SubItems.Add(reminder.Type);
                 item.SubItems.Add(reminder.Message);
+                item.Tag = reminder.ReminderId;
                 listView1.Items.Add(item);
             }
         }
@@ -161,11 +162,6 @@ namespace OOAD
 
         public void CloseView() => this.Close();
 
-        public void TriggerConflictResolution(Guid appointmentId)
-        {
-            var form = new ConflictResolution(appointmentId);
-            form.ShowDialog(this);
-        }
         public void TriggerGroupSuggestion(Guid appId, string name, DateTime start, DateTime end) =>
             RequestOpenGroupForm?.Invoke(appId, name, start, end);
     }

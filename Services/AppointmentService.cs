@@ -82,7 +82,7 @@ namespace OOAD.Services
             };
         }
 
-        public ServiceResult<Guid> SaveAppointment(AppointmentDto dto, bool isOverwrite = false, bool joinGroup = false)
+        public ServiceResult<Guid> SaveAppointment(AppointmentDto dto, bool isOverwrite = false, bool joinGroup = false, bool isGroupMode = false)
         {
             var errorMessage = Validate(dto);
             if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -104,29 +104,43 @@ namespace OOAD.Services
                 }
             }
 
-            var matchedGroup = _groupMeetingRepository.Query
-                                .FirstOrDefault(g => g.Name.ToLower() == dto.Name.ToLower()
-                                                && g.StartTime == dto.StartTime
-                                                && g.EndTime == dto.EndTime);
-            if (matchedGroup != null)
+            if (isGroupMode)
             {
-                if (!joinGroup)
-                    return ServiceResult<Guid>.AskGroup("Có cuộc họp nhóm trùng giờ, bạn muốn tham gia không?");
-                if (JoinGroupMeeting(dto.UserId, matchedGroup.AppointmentId))
-                    return ServiceResult<Guid>.Ok(matchedGroup.AppointmentId, "Đã tham gia cuộc họp nhóm.");
-                return ServiceResult<Guid>.Fail("Không thể tham gia cuộc họp nhóm.");
-            }
-            var appointment = dto.AppointmentId != Guid.Empty
-                ? _appointmentRepository.GetById(dto.AppointmentId)
-                : null;
-            if (appointment == null)
-            {
-                appointment = new Appointments
+                var matchedGroup = _groupMeetingRepository.Query
+                                    .FirstOrDefault(g => g.Name.ToLower() == dto.Name.ToLower()
+                                                    && g.StartTime == dto.StartTime
+                                                    && g.EndTime == dto.EndTime);
+
+                if (matchedGroup != null)
                 {
-                    AppointmentId = Guid.NewGuid(),
-                    CalendarId = dto.CalendarId
-                };
-                _appointmentRepository.Add(appointment);
+                    // Tìm thấy nhóm trùng -> Hỏi người dùng có muốn tham gia không
+                    if (!joinGroup)
+                        return ServiceResult<Guid>.AskGroup("Đã tồn tại cuộc họp nhóm trùng giờ. Bạn có muốn tham gia nhóm này không?");
+
+                    if (JoinGroupMeeting(dto.UserId, matchedGroup.AppointmentId))
+                        return ServiceResult<Guid>.Ok(matchedGroup.AppointmentId, "Đã tham gia cuộc họp nhóm thành công.");
+
+                    return ServiceResult<Guid>.Fail("Không thể tham gia cuộc họp nhóm.");
+                }
+
+                // Nếu không tìm thấy nhóm trùng và đang ở chế độ nhóm -> Tạo mới GroupMeeting
+                // (Logic này giả định rằng nếu isGroupMode=true mà không join được thì sẽ tạo mới)
+                // Bạn có thể thêm logic tạo GroupMeeting record tại đây nếu cần thiết kế như vậy.
+            }
+
+            // Create or load the correct entity type once
+            Appointments appointment;
+            if (dto.AppointmentId == Guid.Empty)
+            {
+                appointment = isGroupMode ? new GroupMeetings() : new Appointments();
+                appointment.AppointmentId = Guid.NewGuid();
+                appointment.CalendarId = dto.CalendarId;
+                _appointmentRepository.Add(appointment); // add only once
+            }
+            else
+            {
+                appointment = _appointmentRepository.GetById(dto.AppointmentId)
+                              ?? throw new InvalidOperationException("Appointment not found.");
             }
 
             appointment.Name = dto.Name;
@@ -138,13 +152,13 @@ namespace OOAD.Services
             foreach (var reminder in existingReminders)
                 _reminderRepository.Remove(reminder);
 
-            if (dto.Reminders != null)
+            if (dto.Reminders != null && dto.Reminders.Any())
             {
                 foreach (var reminderDto in dto.Reminders)
                 {
                     _reminderRepository.Add(new Reminders
                     {
-                        ReminderId = Guid.NewGuid(),
+                        ReminderId = reminderDto.ReminderId,
                         AppointmentId = appointment.AppointmentId,
                         ReminderTime = reminderDto.ReminderTime,
                         Type = reminderDto.Type,
@@ -153,10 +167,32 @@ namespace OOAD.Services
                 }
             }
 
+            if (isGroupMode && appointment is GroupMeetings groupMeeting && !IsGroupMeeting(appointment.AppointmentId))
+            {
+                // Thêm user tạo ra vào nhóm luôn
+                _userGroupRepository.Add(new UserGroupMeetings
+                {
+                    UserId = dto.UserId,
+                    GroupMeetingId = groupMeeting.AppointmentId,
+                    GroupMeeting = groupMeeting
+                });
+            }
+
             _appointmentRepository.SaveChanges();
             return ServiceResult<Guid>.Ok(appointment.AppointmentId, "Lưu thành công.");
         }
 
+        public ServiceResult<UserGroupMeetings> JoinMeeting(Guid userId, Guid groupMeetingId)
+        {
+            var userGroup = new UserGroupMeetings
+            {
+                UserId = userId,
+                GroupMeetingId = groupMeetingId
+            };
+            _userGroupRepository.Add(userGroup);
+            _userGroupRepository.SaveChanges();
+            return ServiceResult<UserGroupMeetings>.Ok(userGroup);
+        }
         public ServiceResult<Guid> DeleteAppointment(Guid appointmentId, Guid userId)
         {
             if (IsGroupMeeting(appointmentId))

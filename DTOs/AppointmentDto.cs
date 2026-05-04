@@ -23,7 +23,7 @@ public class AppointmentDto
     public DateTime StartTime { get; set; } = DateTime.Now;
     public DateTime EndTime { get; set; } = DateTime.Now;
 
-    public List<ReminderDto> Reminders { get; set; }
+    public List<ReminderDto> Reminders { get; set; } = new List<ReminderDto>();
 
     public AppointmentDto() { }
 }

@@ -40,7 +40,7 @@ namespace OOAD
         {
             InitializeComponent();
 
-            _presenter = new GroupMeetingSuggestionPresenter(this);
+            _presenter = new GroupMeetingSuggestionPresenter(this, UserId, AppointmentId);
 
             UserId = userId;
             AppointmentId = appointmentId;

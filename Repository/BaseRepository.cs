@@ -51,10 +51,5 @@ namespace OOAD.Repository
         {
             _context.SaveChanges();
         }
-
-        public IDbContextTransaction BeginTransaction()
-        {
-            return _context.Database.BeginTransaction();
-        }
     }
 }
