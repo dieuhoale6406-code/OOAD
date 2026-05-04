@@ -20,6 +20,6 @@ namespace OOAD.Model
         // GroupMeeting
         public Guid? UserId { get; set; }
         public Guid? GroupMeetingId { get; set; }
-        public UserGroupMeetings? UserGroupMeeting { get; set; } = null!;
+        public UserGroupMeetings? UserGroupMeeting { get; set; }
     }
 }

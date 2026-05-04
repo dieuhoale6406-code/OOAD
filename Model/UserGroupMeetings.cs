@@ -8,6 +8,6 @@ namespace OOAD.Model
         public Guid GroupMeetingId { get; set; }
         public Users User { get; set; } = null!;
         public GroupMeetings GroupMeeting { get; set; } = null!;
-        public List<Reminders> Reminders { get; set; } = new List<Reminders>();
+        public virtual ICollection<Reminders> Reminders { get; set; } = new List<Reminders>();
     }
 }

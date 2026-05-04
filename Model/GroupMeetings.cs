@@ -5,6 +5,6 @@ namespace OOAD.Model
 {
     public class GroupMeetings : Appointments
     {
-        public List<UserGroupMeetings> UserGroupMeetings { get; set; } = new List<UserGroupMeetings>();
+        public virtual ICollection<UserGroupMeetings> UserGroupMeetings { get; set; } = new List<UserGroupMeetings>();
     }
 }
