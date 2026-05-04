@@ -1,5 +1,9 @@
 ﻿using OOAD.Model;
 using OOAD.Presenter;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace OOAD
 {
@@ -12,13 +16,23 @@ namespace OOAD
         public DateTime SelectedDate => monthCalendar1.SelectionStart.Date;
         public bool ShowAllAppointments => checkBox1.Checked;
 
+        public string GreetingText
+        {
+            get => lblGreeting.Text;
+            set => lblGreeting.Text = value;
+        }
+
         public Guid? SelectedAppointmentId
         {
             get
             {
                 if (dgvAppointment.CurrentRow == null)
                     return null;
-                return Guid.TryParse(dgvAppointment.CurrentRow.Cells["AppointmentId"].Value?.ToString(), out var id) ? id : null;
+
+                return Guid.TryParse(
+                    dgvAppointment.CurrentRow.Cells["AppointmentId"].Value?.ToString(),
+                    out var id
+                ) ? id : null;
             }
         }
         #endregion
@@ -49,6 +63,7 @@ namespace OOAD
             btnAdd.Click += (_, _) => AddRequested?.Invoke(this, EventArgs.Empty);
             btnUpdate.Click += (_, _) => UpdateRequested?.Invoke(this, EventArgs.Empty);
             btnDelete.Click += (_, _) => DeleteRequested?.Invoke(this, EventArgs.Empty);
+            btnLogout.Click += (_, _) => Logout();
 
             _presenter.Initialize();
         }
@@ -68,32 +83,32 @@ namespace OOAD
                 .ToList();
 
             if (dgvAppointment.Columns["AppointmentId"] != null)
-                dgvAppointment.Columns["AppointmentId"]?.Visible = false;
+                dgvAppointment.Columns["AppointmentId"]!.Visible = false;
 
             if (dgvAppointment.Columns["Name"] != null)
             {
-                dgvAppointment.Columns["Name"]?.HeaderText = "Tên cuộc hẹn";
-                dgvAppointment.Columns["Name"]?.Width = 160;
+                dgvAppointment.Columns["Name"]!.HeaderText = "Tên cuộc hẹn";
+                dgvAppointment.Columns["Name"]!.Width = 160;
             }
 
             if (dgvAppointment.Columns["Location"] != null)
             {
-                dgvAppointment.Columns["Location"]?.HeaderText = "Địa điểm";
-                dgvAppointment.Columns["Location"]?.Width = 130;
+                dgvAppointment.Columns["Location"]!.HeaderText = "Địa điểm";
+                dgvAppointment.Columns["Location"]!.Width = 130;
             }
 
             if (dgvAppointment.Columns["StartTime"] != null)
             {
-                dgvAppointment.Columns["StartTime"]?.HeaderText = "Bắt đầu";
-                dgvAppointment.Columns["StartTime"]?.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                dgvAppointment.Columns["StartTime"]?.Width = 140;
+                dgvAppointment.Columns["StartTime"]!.HeaderText = "Bắt đầu";
+                dgvAppointment.Columns["StartTime"]!.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dgvAppointment.Columns["StartTime"]!.Width = 140;
             }
 
             if (dgvAppointment.Columns["EndTime"] != null)
             {
-                dgvAppointment.Columns["EndTime"]?.HeaderText = "Kết thúc";
-                dgvAppointment.Columns["EndTime"]?.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
-                dgvAppointment.Columns["EndTime"]?.Width = 140;
+                dgvAppointment.Columns["EndTime"]!.HeaderText = "Kết thúc";
+                dgvAppointment.Columns["EndTime"]!.DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                dgvAppointment.Columns["EndTime"]!.Width = 140;
             }
         }
 
@@ -103,7 +118,8 @@ namespace OOAD
                 "Bạn có chắc muốn xóa cuộc hẹn đã chọn?",
                 "Xác nhận",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
+                MessageBoxIcon.Question
+            );
 
             return result == DialogResult.Yes;
         }
@@ -124,9 +140,21 @@ namespace OOAD
             form.ShowDialog(this);
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void Logout()
         {
-            DeleteRequested?.Invoke(this, EventArgs.Empty);
+            var confirm = MessageBox.Show(
+                "Bạn có chắc muốn đăng xuất không?",
+                "Đăng xuất",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            // Cách này không phụ thuộc vào Login.OpenMainCalendar đang mở MainCalendar theo kiểu Show hay ShowDialog.
+            // Program.cs đang chạy Application.Run(new Login()), nên restart sẽ quay lại màn Login sạch nhất.
+            Application.Restart();
         }
     }
 }

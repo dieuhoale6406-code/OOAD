@@ -1,22 +1,25 @@
 using OOAD.Services;
 using OOAD.Data;
-using OOAD.Repository;
 using OOAD.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OOAD.Presenter
 {
     public class MainCalendarPresenter
     {
-        private MainCalendar _view;
-        private CalendarService _calendarService;
+        private readonly MainCalendar _view;
+        private readonly AppDBContext _context;
+        private readonly CalendarService _calendarService;
         private readonly Guid _userId;
         private Guid _calendarId;
 
         public MainCalendarPresenter(MainCalendar view, Guid userId)
         {
             _view = view;
-            var context = new AppDBContext();
-            _calendarService = new CalendarService(context);
+            _context = new AppDBContext();
+            _calendarService = new CalendarService(_context);
             _userId = userId;
         }
 
@@ -28,6 +31,24 @@ namespace OOAD.Presenter
             _view.AddRequested += OnAddRequested;
             _view.UpdateRequested += OnUpdateRequested;
             _view.DeleteRequested += OnDeleteRequested;
+        }
+
+        private void LoadCurrentUserGreeting()
+        {
+            if (_userId == Guid.Empty)
+            {
+                _view.GreetingText = "Xin chào người dùng";
+                return;
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.UserId == _userId);
+            var displayName = string.IsNullOrWhiteSpace(user?.FullName)
+                ? user?.Email
+                : user.FullName;
+
+            _view.GreetingText = string.IsNullOrWhiteSpace(displayName)
+                ? "Xin chào người dùng"
+                : $"Xin chào, {displayName}";
         }
 
         private void LoadAppointments()
@@ -51,6 +72,8 @@ namespace OOAD.Presenter
 
         private void OnViewLoaded(object? sender, EventArgs e)
         {
+            LoadCurrentUserGreeting();
+
             var result = _calendarService.GetCalendarByUserId(_userId);
             if (result.Status == HandleStatus.Error)
             {
