@@ -41,7 +41,7 @@
             // 
             // monthCalendar1
             // 
-            monthCalendar1.Location = new Point(30, 35);
+            monthCalendar1.Location = new Point(44, 145);
             monthCalendar1.Margin = new Padding(7);
             monthCalendar1.Name = "monthCalendar1";
             monthCalendar1.TabIndex = 0;
@@ -49,16 +49,16 @@
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(392, 65);
+            dataGridView1.Location = new Point(398, 145);
             dataGridView1.Margin = new Padding(2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 82;
-            dataGridView1.Size = new Size(643, 217);
+            dataGridView1.Size = new Size(643, 253);
             dataGridView1.TabIndex = 1;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(392, 329);
+            btnAdd.Location = new Point(398, 464);
             btnAdd.Margin = new Padding(2);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(120, 45);
@@ -68,7 +68,7 @@
             // 
             // btnUpdate
             // 
-            btnUpdate.Location = new Point(675, 329);
+            btnUpdate.Location = new Point(681, 464);
             btnUpdate.Margin = new Padding(2);
             btnUpdate.Name = "btnUpdate";
             btnUpdate.Size = new Size(120, 45);
@@ -78,7 +78,7 @@
             // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(915, 329);
+            btnDelete.Location = new Point(921, 464);
             btnDelete.Margin = new Padding(2);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(120, 45);
@@ -90,7 +90,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(30, 310);
+            label1.Location = new Point(44, 420);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new Size(182, 25);
@@ -100,7 +100,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(392, 25);
+            label2.Location = new Point(398, 105);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new Size(199, 25);
@@ -110,7 +110,7 @@
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(392, 287);
+            checkBox1.Location = new Point(398, 422);
             checkBox1.Margin = new Padding(2);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(281, 29);
@@ -122,7 +122,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1098, 451);
+            ClientSize = new Size(1098, 540);
             Controls.Add(checkBox1);
             Controls.Add(label2);
             Controls.Add(label1);

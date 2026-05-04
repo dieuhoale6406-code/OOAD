@@ -41,7 +41,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(131, 124);
+            label1.Location = new Point(118, 170);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new Size(57, 25);
@@ -51,7 +51,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(131, 184);
+            label2.Location = new Point(118, 230);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new Size(91, 25);
@@ -60,7 +60,7 @@
             // 
             // txtName
             // 
-            txtName.Location = new Point(281, 124);
+            txtName.Location = new Point(268, 170);
             txtName.Margin = new Padding(2);
             txtName.Name = "txtName";
             txtName.Size = new Size(347, 31);
@@ -69,7 +69,7 @@
             // 
             // txtPass
             // 
-            txtPass.Location = new Point(281, 179);
+            txtPass.Location = new Point(268, 225);
             txtPass.Margin = new Padding(2);
             txtPass.Name = "txtPass";
             txtPass.PasswordChar = '*';
@@ -78,7 +78,7 @@
             // 
             // btnOK
             // 
-            btnOK.Location = new Point(130, 289);
+            btnOK.Location = new Point(117, 335);
             btnOK.Margin = new Padding(2);
             btnOK.Name = "btnOK";
             btnOK.Size = new Size(120, 48);
@@ -88,7 +88,7 @@
             // 
             // btnReset
             // 
-            btnReset.Location = new Point(319, 289);
+            btnReset.Location = new Point(306, 335);
             btnReset.Margin = new Padding(2);
             btnReset.Name = "btnReset";
             btnReset.Size = new Size(120, 48);
@@ -98,7 +98,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(508, 289);
+            btnCancel.Location = new Point(495, 335);
             btnCancel.Margin = new Padding(2);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(120, 48);
@@ -110,7 +110,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(345, 58);
+            label3.Location = new Point(330, 90);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
             label3.Size = new Size(78, 32);
