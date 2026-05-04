@@ -8,11 +8,18 @@ namespace OOAD.Repository
         public ReminderRepository(AppDBContext context) : base(context) { }
         public List<Reminders> GetRemindersByAppointmentId(Guid appointmentId)
         {
-            return Query.Where(r => r.AppointmentId == appointmentId).ToList();
+            return Query
+                .Where(r => r.AppointmentId == appointmentId
+                            && r.UserId == null
+                            && r.GroupMeetingId == null)
+                .ToList();
         }
+
         public List<Reminders> GetRemindersByGroupMeetingId(Guid userId, Guid groupMeetingId)
         {
-            return Query.Where(r => r.UserId == userId && r.GroupMeetingId == groupMeetingId).ToList();
+            return Query
+                .Where(r => r.UserId == userId && r.GroupMeetingId == groupMeetingId)
+                .ToList();
         }
     }
 }

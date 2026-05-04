@@ -13,12 +13,12 @@ public class AppointmentDto
     public string Name
     {
         get { return _name; }
-        set { _name = value.Trim() ?? string.Empty; }
+        set { _name = value?.Trim() ?? string.Empty; }
     }
     public string Location
     {
         get { return _location; }
-        set { _location = value.Trim() ?? string.Empty; }
+        set { _location = value?.Trim() ?? string.Empty; }
     }
     public DateTime StartTime { get; set; } = DateTime.Now;
     public DateTime EndTime { get; set; } = DateTime.Now;
