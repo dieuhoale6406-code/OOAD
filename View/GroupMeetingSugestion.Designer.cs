@@ -38,49 +38,68 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(275, 32);
+            label1.ForeColor = Color.DarkBlue;
+            label1.Location = new Point(230, 27);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(183, 45);
+            label1.Size = new Size(137, 32);
             label1.TabIndex = 0;
             label1.Text = "Thông báo";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(98, 109);
+            label2.BackColor = SystemColors.ControlLightLight;
+            label2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.MidnightBlue;
+            label2.Location = new Point(61, 87);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(585, 32);
+            label2.Size = new Size(476, 28);
             label2.TabIndex = 1;
             label2.Text = "Có cuộc họp nhóm tương tự, bạn có muốn tham gia?";
             // 
             // btnJoin
             // 
-            btnJoin.Location = new Point(165, 197);
+            btnJoin.BackColor = Color.CornflowerBlue;
+            btnJoin.FlatAppearance.BorderSize = 0;
+            btnJoin.FlatStyle = FlatStyle.Flat;
+            btnJoin.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnJoin.ForeColor = SystemColors.ControlLightLight;
+            btnJoin.Location = new Point(127, 154);
+            btnJoin.Margin = new Padding(2, 2, 2, 2);
             btnJoin.Name = "btnJoin";
-            btnJoin.Size = new Size(150, 46);
+            btnJoin.Size = new Size(115, 36);
             btnJoin.TabIndex = 2;
             btnJoin.Text = "Join";
-            btnJoin.UseVisualStyleBackColor = true;
+            btnJoin.UseVisualStyleBackColor = false;
             // 
             // btnNoThanks
             // 
-            btnNoThanks.Location = new Point(467, 197);
+            btnNoThanks.FlatAppearance.BorderColor = Color.RoyalBlue;
+            btnNoThanks.FlatAppearance.BorderSize = 3;
+            btnNoThanks.FlatStyle = FlatStyle.Flat;
+            btnNoThanks.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnNoThanks.ForeColor = Color.RoyalBlue;
+            btnNoThanks.Location = new Point(359, 154);
+            btnNoThanks.Margin = new Padding(2, 2, 2, 2);
             btnNoThanks.Name = "btnNoThanks";
-            btnNoThanks.Size = new Size(150, 46);
+            btnNoThanks.Size = new Size(115, 36);
             btnNoThanks.TabIndex = 3;
             btnNoThanks.Text = "No Thanks";
             btnNoThanks.UseVisualStyleBackColor = true;
             // 
             // GroupMeetingSugestion
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 304);
+            BackColor = SystemColors.ControlLightLight;
+            ClientSize = new Size(615, 238);
             Controls.Add(btnNoThanks);
             Controls.Add(btnJoin);
             Controls.Add(label2);
             Controls.Add(label1);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "GroupMeetingSugestion";
             Text = "GroupMeetingSugestion";
             ResumeLayout(false);
