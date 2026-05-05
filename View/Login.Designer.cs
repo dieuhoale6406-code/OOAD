@@ -41,87 +41,120 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(131, 124);
+            label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label1.ForeColor = Color.RoyalBlue;
+            label1.Location = new Point(122, 188);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(57, 25);
+            label1.Size = new Size(64, 28);
             label1.TabIndex = 0;
             label1.Text = "Gmail";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(131, 184);
+            label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            label2.ForeColor = Color.RoyalBlue;
+            label2.Location = new Point(122, 255);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(91, 25);
+            label2.Size = new Size(102, 28);
             label2.TabIndex = 1;
             label2.Text = "Password:";
             // 
             // txtName
             // 
-            txtName.Location = new Point(281, 124);
-            txtName.Margin = new Padding(2);
+            txtName.BorderStyle = BorderStyle.FixedSingle;
+            txtName.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtName.ForeColor = SystemColors.InactiveCaption;
+            txtName.Location = new Point(287, 188);
+            txtName.Margin = new Padding(4, 2, 2, 2);
+            txtName.MaxLength = 35000;
             txtName.Name = "txtName";
-            txtName.Size = new Size(347, 31);
+            txtName.PlaceholderText = "Nhập gmail của bạn vào đây";
+            txtName.Size = new Size(382, 29);
             txtName.TabIndex = 2;
-            txtName.TextChanged += txtName_TextChanged;
             // 
             // txtPass
             // 
-            txtPass.Location = new Point(281, 179);
+            txtPass.BorderStyle = BorderStyle.FixedSingle;
+            txtPass.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtPass.Location = new Point(287, 257);
             txtPass.Margin = new Padding(2);
             txtPass.Name = "txtPass";
             txtPass.PasswordChar = '*';
-            txtPass.Size = new Size(347, 31);
+            txtPass.PlaceholderText = "Nhập mật khẩu tài khoản";
+            txtPass.Size = new Size(382, 29);
             txtPass.TabIndex = 3;
             // 
             // btnOK
             // 
-            btnOK.Location = new Point(130, 289);
+            btnOK.BackColor = Color.RoyalBlue;
+            btnOK.FlatAppearance.BorderColor = Color.RoyalBlue;
+            btnOK.FlatAppearance.BorderSize = 3;
+            btnOK.FlatAppearance.MouseOverBackColor = Color.CornflowerBlue;
+            btnOK.FlatStyle = FlatStyle.Flat;
+            btnOK.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnOK.ForeColor = SystemColors.ControlLightLight;
+            btnOK.Location = new Point(121, 373);
             btnOK.Margin = new Padding(2);
             btnOK.Name = "btnOK";
-            btnOK.Size = new Size(120, 48);
+            btnOK.Size = new Size(132, 54);
             btnOK.TabIndex = 4;
             btnOK.Text = "OK";
-            btnOK.UseVisualStyleBackColor = true;
+            btnOK.UseVisualStyleBackColor = false;
             // 
             // btnReset
             // 
-            btnReset.Location = new Point(319, 289);
+            btnReset.BackColor = Color.RoyalBlue;
+            btnReset.FlatAppearance.BorderColor = Color.RoyalBlue;
+            btnReset.FlatAppearance.BorderSize = 3;
+            btnReset.FlatAppearance.MouseOverBackColor = Color.CornflowerBlue;
+            btnReset.FlatStyle = FlatStyle.Flat;
+            btnReset.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnReset.ForeColor = SystemColors.ControlLightLight;
+            btnReset.Location = new Point(329, 373);
             btnReset.Margin = new Padding(2);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(120, 48);
+            btnReset.Size = new Size(132, 54);
             btnReset.TabIndex = 5;
             btnReset.Text = "Reset";
-            btnReset.UseVisualStyleBackColor = true;
+            btnReset.UseVisualStyleBackColor = false;
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(508, 289);
+            btnCancel.BackColor = SystemColors.ControlLightLight;
+            btnCancel.FlatAppearance.BorderColor = Color.CornflowerBlue;
+            btnCancel.FlatAppearance.BorderSize = 3;
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnCancel.ForeColor = Color.RoyalBlue;
+            btnCancel.Location = new Point(537, 373);
             btnCancel.Margin = new Padding(2);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(120, 48);
+            btnCancel.Size = new Size(132, 54);
             btnCancel.TabIndex = 6;
             btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.UseVisualStyleBackColor = false;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(345, 58);
+            label3.Font = new Font("Elephant", 19.9999981F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.RoyalBlue;
+            label3.Location = new Point(329, 74);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(78, 32);
+            label3.Size = new Size(145, 51);
             label3.TabIndex = 7;
             label3.Text = "Login";
             // 
             // Login
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(11F, 28F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(743, 470);
+            BackColor = SystemColors.ButtonHighlight;
+            ClientSize = new Size(817, 526);
             Controls.Add(label3);
             Controls.Add(btnCancel);
             Controls.Add(btnReset);
@@ -130,6 +163,8 @@
             Controls.Add(txtName);
             Controls.Add(label2);
             Controls.Add(label1);
+            Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            ForeColor = SystemColors.Highlight;
             Margin = new Padding(2);
             Name = "Login";
             Text = "Login";

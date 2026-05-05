@@ -21,6 +21,6 @@ namespace OOAD.Model
 
         public Calendars Calendar { get; set; } = null!;
 
-        public List<UserGroupMeetings> UserGroupMeetings { get; set; } = new List<UserGroupMeetings>();
+        public virtual ICollection<UserGroupMeetings> UserGroupMeetings { get; set; } = new List<UserGroupMeetings>();
     }
 }

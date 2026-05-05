@@ -33,6 +33,7 @@ namespace OOAD.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // ================= USERS =================
             modelBuilder.Entity<Users>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -42,33 +43,46 @@ namespace OOAD.Data
                 .WithOne(c => c.User)
                 .HasForeignKey<Calendars>(c => c.UserId);
 
+            // ================= CALENDAR =================
             modelBuilder.Entity<Calendars>()
                 .HasMany(c => c.Appointments)
                 .WithOne(a => a.Calendar)
                 .HasForeignKey(a => a.CalendarId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Appointments>()
-                .HasMany(a => a.Reminders)
-                .WithOne(r => r.Appointment)
+            // ================= USER GROUPMEETING =================
+            modelBuilder.Entity<UserGroupMeetings>()
+                .HasKey(ua => new { ua.UserId, ua.GroupMeetingId });
+
+            modelBuilder.Entity<UserGroupMeetings>()
+                .HasOne(ua => ua.User)
+                .WithMany(u => u.UserGroupMeetings)
+                .HasForeignKey(ua => ua.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<UserGroupMeetings>()
+                .HasOne(ua => ua.GroupMeeting)
+                .WithMany(a => a.UserGroupMeetings)
+                .HasForeignKey(ua => ua.GroupMeetingId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // ================= REMINDER (FIX CHÍNH Ở ĐÂY) =================
+            modelBuilder.Entity<Reminders>()
+                .HasKey(r => r.ReminderId);
+            
+            modelBuilder.Entity<Reminders>()
+                .HasOne(r => r.Appointment)
+                .WithMany(a => a.Reminders)
                 .HasForeignKey(r => r.AppointmentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<UserGroupMeetings>()
-                .HasKey(ug => new { ug.UserId, ug.GroupMeetingId });
+            modelBuilder.Entity<Reminders>()
+                .HasOne(r => r.UserGroupMeeting)
+                .WithMany(ua => ua.Reminders)
+                .HasForeignKey(r => new { r.UserId, r.GroupMeetingId })
+                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<UserGroupMeetings>()
-                .HasOne(ug => ug.User)
-                .WithMany(u => u.UserGroupMeetings)
-                .HasForeignKey(ug => ug.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<UserGroupMeetings>()
-                .HasOne(ug => ug.GroupMeeting)
-                .WithMany(g => g.UserGroupMeetings)
-                .HasForeignKey(ug => ug.GroupMeetingId)
-                .OnDelete(DeleteBehavior.NoAction);
-
+            // ================= SEED =================
             SeedDefaultUsers(modelBuilder);
         }
 
@@ -134,31 +148,11 @@ namespace OOAD.Data
             );
 
             modelBuilder.Entity<Calendars>().HasData(
-                new Calendars
-                {
-                    CalendarId = calendar1Id,
-                    UserId = user1Id
-                },
-                new Calendars
-                {
-                    CalendarId = calendar2Id,
-                    UserId = user2Id
-                },
-                new Calendars
-                {
-                    CalendarId = calendar3Id,
-                    UserId = user3Id
-                },
-                new Calendars
-                {
-                    CalendarId = calendar4Id,
-                    UserId = user4Id
-                },
-                new Calendars
-                {
-                    CalendarId = calendar5Id,
-                    UserId = user5Id
-                }
+                new Calendars { CalendarId = calendar1Id, UserId = user1Id },
+                new Calendars { CalendarId = calendar2Id, UserId = user2Id },
+                new Calendars { CalendarId = calendar3Id, UserId = user3Id },
+                new Calendars { CalendarId = calendar4Id, UserId = user4Id },
+                new Calendars { CalendarId = calendar5Id, UserId = user5Id }
             );
         }
     }

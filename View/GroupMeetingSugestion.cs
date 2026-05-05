@@ -1,14 +1,11 @@
 ﻿using OOAD.Model;
 using OOAD.Presenter;
-using OOAD.Data;
-using OOAD.Repository;
-using OOAD.Service;
 
 namespace OOAD
 {
     public partial class GroupMeetingSugestion : Form
     {
-        private GroupMeetingSuggestionPresenter? _presenter;
+        private GroupMeetingSuggestionPresenter _presenter;
 
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
@@ -43,6 +40,8 @@ namespace OOAD
         {
             InitializeComponent();
 
+            _presenter = new GroupMeetingSuggestionPresenter(this, UserId, AppointmentId);
+
             UserId = userId;
             AppointmentId = appointmentId;
             AppointmentName = appointmentName;
@@ -52,24 +51,6 @@ namespace OOAD
             Load += (_, _) => ViewLoaded?.Invoke(this, EventArgs.Empty);
             btnJoin.Click += (_, _) => JoinRequested?.Invoke(this, EventArgs.Empty);
             btnNoThanks.Click += (_, _) => DeclineRequested?.Invoke(this, EventArgs.Empty);
-
-            InitializePresenter();
-        }
-
-        private void InitializePresenter()
-        {
-            var dbContext = new AppDBContext();
-
-            var groupMeetingRepository = new GroupMeetingRepository(dbContext);
-            var appointmentRepository = new AppointmentRepository(dbContext);
-
-            var groupMeetingService = new GroupMeetingService(groupMeetingRepository);
-            var appointmentService = new AppointmentService(appointmentRepository);
-
-            _presenter = new GroupMeetingSuggestionPresenter(
-                this,
-                groupMeetingService,
-                appointmentService);
 
             _presenter.Initialize();
         }

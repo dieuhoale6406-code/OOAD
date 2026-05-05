@@ -1,6 +1,8 @@
-using OOAD.DTOs;
 using OOAD.Model;
-using OOAD.Service;
+using OOAD.Services;
+using OOAD.Data;
+using OOAD.Repository;
+using OOAD.DTOs;
 
 namespace OOAD.Presenter
 {
@@ -8,29 +10,16 @@ namespace OOAD.Presenter
     {
         private readonly Appointment _view;
         private readonly AppointmentService _appointmentService;
-        private readonly ReminderService _reminderService;
-        private readonly ConflictService _conflictService;
-        private readonly GroupMeetingService _groupMeetingService;
 
         private readonly Guid _userId;
         private readonly Guid _calendarId;
         private Guid? _appointmentId;
 
-        public AppointmentPresenter(
-            Appointment view,
-            AppointmentService appointmentService,
-            ReminderService reminderService,
-            ConflictService conflictService,
-            GroupMeetingService groupMeetingService,
-            Guid userId,
-            Guid calendarId,
-            Guid? appointmentId)
+        public AppointmentPresenter(Appointment view, Guid userId, Guid calendarId, Guid? appointmentId)
         {
             _view = view;
-            _appointmentService = appointmentService;
-            _reminderService = reminderService;
-            _conflictService = conflictService;
-            _groupMeetingService = groupMeetingService;
+            var context = new AppDBContext();
+            _appointmentService = new AppointmentService(context);
             _userId = userId;
             _calendarId = calendarId;
             _appointmentId = appointmentId;
@@ -43,18 +32,28 @@ namespace OOAD.Presenter
             _view.CancelRequested += (_, _) => _view.CloseView();
             _view.AddReminderRequested += OnAddReminderRequested;
             _view.DeleteReminderRequested += OnDeleteReminderRequested;
+            _view.RequestOpenGroupForm += HandleOpenGroupForm;
+
+            OnViewLoaded(this, EventArgs.Empty);
         }
 
         private void OnViewLoaded(object? sender, EventArgs e)
         {
             _view.CalendarId = _calendarId;
             _view.AppointmentId = _appointmentId;
-
             if (!_appointmentId.HasValue)
+            {
+                _view.AddMode = true;
                 return;
-
-            var appointment = _appointmentService.GetById(_appointmentId.Value);
-
+            }
+            _view.AddMode = false;
+            var result = _appointmentService.GetAppointmentById(_appointmentId.Value);
+            if (result.Status == HandleStatus.Error)
+            {
+                _view.ShowError("Không tìm thấy cuộc hẹn.");
+                return;
+            }
+            var appointment = result.Data;
             if (appointment == null)
             {
                 _view.ShowError("Không tìm thấy cuộc hẹn.");
@@ -66,145 +65,197 @@ namespace OOAD.Presenter
             _view.StartTime = appointment.StartTime;
             _view.EndTime = appointment.EndTime;
 
+            var isGroupMeeting = _appointmentService.IsGroupMeeting(appointment.AppointmentId);
+            _view.IsGroupMode = isGroupMeeting;
+
+            if (isGroupMeeting)
+                LoadParticipants(appointment.AppointmentId);
+            else
+                _view.BindParticipants(Array.Empty<string>());
+
             LoadReminders(appointment.AppointmentId);
         }
 
         private void OnSaveRequested(object? sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_view.AppointmentName))
-            {
-                _view.ShowError("Tên cuộc hẹn không được để trống.");
+            var appointmentDto = BuildDto();
+
+            if (appointmentDto.StartTime <= DateTime.Now && !_view.ConfirmCreatePastAppointment())
                 return;
-            }
 
-            if (_view.EndTime <= _view.StartTime)
-            {
-                _view.ShowError("Thời gian kết thúc phải lớn hơn thời gian bắt đầu.");
-                return;
-            }
-
-            var dto = new AppointmentCreateDto
-            {
-                CalendarId = _calendarId,
-                Name = _view.AppointmentName.Trim(),
-                Location = _view.Location.Trim(),
-                StartTime = _view.StartTime,
-                EndTime = _view.EndTime
-            };
-
-            if (_appointmentId.HasValue)
-            {
-                _appointmentService.UpdateAppointment(_appointmentId.Value, dto);
-                _view.ShowMessage("Cập nhật cuộc hẹn thành công.");
-                return;
-            }
-
-            var createdAppointment = _appointmentService.CreateAppointment(dto);
-
-            _appointmentId = createdAppointment.AppointmentId;
-            _view.AppointmentId = createdAppointment.AppointmentId;
-
-            var conflictResult = _conflictService.ResolveConflict(createdAppointment.AppointmentId);
-
-            if (conflictResult.HasConflict)
-            {
-                _view.OpenConflictResolution(createdAppointment.AppointmentId);
-
-                var stillExists = _appointmentService.GetById(createdAppointment.AppointmentId) != null;
-
-                if (!stillExists)
-                {
-                    _view.ShowMessage("Cuộc hẹn mới đã bị hủy. Vui lòng chọn thời gian khác.");
-                    return;
-                }
-            }
-
-            var matchedGroupMeeting = _groupMeetingService.FindMatchingGroupMeeting(
-                createdAppointment.Name,
-                createdAppointment.StartTime,
-                createdAppointment.EndTime);
-
-            if (matchedGroupMeeting != null)
-            {
-                _view.OpenGroupMeetingSuggestion(
-                    _userId,
-                    createdAppointment.AppointmentId,
-                    createdAppointment.Name,
-                    createdAppointment.StartTime,
-                    createdAppointment.EndTime);
-
-                var stillExists = _appointmentService.GetById(createdAppointment.AppointmentId) != null;
-
-                if (!stillExists)
-                    return;
-            }
-
-            _view.ShowMessage("Thêm cuộc hẹn thành công.");
+            var result = _appointmentService.SaveAppointment(
+                appointmentDto,
+                isGroupMode: _view.IsGroupMode,
+                participantEmails: _view.ParticipantEmails
+            );
+            HandleSaveResult(appointmentDto, result);
         }
 
         private void OnAddReminderRequested(object? sender, EventArgs e)
         {
-            if (!_appointmentId.HasValue)
+            var reminderType = _view.ReminderType?.Trim();
+
+            if (string.IsNullOrWhiteSpace(reminderType) || reminderType == "Chọn thời gian")
             {
-                _view.ShowError("Vui lòng lưu cuộc hẹn trước khi thêm reminder.");
+                _view.ShowError("Vui lòng chọn thời gian nhắc nhở.");
                 return;
             }
 
-            var reminderTime = CalculateReminderTime(_view.StartTime, _view.ReminderType);
+            DateTime reminderTime;
 
-            var reminder = new Reminders
+            if (reminderType == "Khác")
+            {
+                var defaultReminderTime = _view.StartTime.AddMinutes(-10);
+                var customTime = _view.AskCustomReminderTime(defaultReminderTime);
+
+                if (!customTime.HasValue)
+                    return;
+
+                reminderTime = customTime.Value;
+
+                if (reminderTime >= _view.StartTime)
+                {
+                    _view.ShowError("Thời gian nhắc nhở phải trước thời gian bắt đầu cuộc hẹn.");
+                    return;
+                }
+            }
+            else
+            {
+                var minutes = _appointmentService.GetReminderMinutes(reminderType);
+                reminderTime = _view.StartTime.AddMinutes(-minutes);
+            }
+
+            if (reminderTime < DateTime.Now)
+            {
+                _view.ShowError("Thời gian nhắc nhở đã qua.");
+                return;
+            }
+
+            var newReminder = new ReminderDto
             {
                 ReminderId = Guid.NewGuid(),
-                AppointmentId = _appointmentId.Value,
-                ReminderTime = reminderTime,
-                Type = _view.ReminderType,
-                Message = $"Reminder: {_view.AppointmentName}"
+                Type = reminderType,
+                Message = $"Nhắc nhở: {_view.AppointmentName}",
+                ReminderTime = reminderTime
             };
 
-            _reminderService.CreateReminder(reminder);
-            LoadReminders(_appointmentId.Value);
+            var item = new ListViewItem(reminderTime.ToString("dd/MM/yyyy HH:mm"));
+            item.SubItems.Add(newReminder.Type);
+            item.SubItems.Add(newReminder.Message);
+            item.Tag = newReminder.ReminderId;
+
+            _view.ReminderList.Items.Add(item);
+
+            foreach (ListViewItem i in _view.ReminderList.Items)
+            {
+                i.Selected = false;
+            }
         }
 
         private void OnDeleteReminderRequested(object? sender, EventArgs e)
         {
-            if (!_appointmentId.HasValue)
-            {
-                _view.ShowError("Chưa có cuộc hẹn để xóa reminder.");
-                return;
-            }
-
-            var reminderId = _view.SelectedReminderId;
-
-            if (!reminderId.HasValue)
+            if (_view.ReminderList.SelectedItems.Count == 0)
             {
                 _view.ShowError("Vui lòng chọn reminder để xóa.");
                 return;
             }
 
-            _reminderService.DeleteReminder(reminderId.Value);
-            LoadReminders(_appointmentId.Value);
+            var selectedItems = _view.ReminderList.SelectedItems
+                .Cast<ListViewItem>()
+                .ToList();
+
+            foreach (var item in selectedItems)
+            {
+                _view.ReminderList.Items.Remove(item);
+            }
         }
 
         private void LoadReminders(Guid appointmentId)
         {
-            var reminders = _reminderService.GetRemindersByAppointmentId(appointmentId);
-            _view.BindReminders(reminders);
+            var reminders = _appointmentService.GetRemindersForUser(_userId, appointmentId);
+            _view.BindReminders(reminders.Data?.ToList() ?? new List<ReminderDto>());
         }
 
-        private static DateTime CalculateReminderTime(DateTime start, string reminderType)
+        private void LoadParticipants(Guid appointmentId)
         {
-            return reminderType switch
+            var participants = _appointmentService.GetGroupParticipants(appointmentId);
+            _view.BindParticipants(participants.Data ?? new List<string>());
+        }
+
+        private AppointmentDto BuildDto()
+        {
+            return new AppointmentDto
             {
-                "Trước 15 phút" => start.AddMinutes(-15),
-                "Trước 30 phút" => start.AddMinutes(-30),
-                "Trước 1 tiếng" => start.AddHours(-1),
-                "Trước 2 tiếng" => start.AddHours(-2),
-                "Trước 1 ngày" => start.AddDays(-1),
-                "Trước 2 ngày" => start.AddDays(-2),
-                "Trước 1 tuần" => start.AddDays(-7),
-                "Trước 2 tuần" => start.AddDays(-14),
-                _ => start.AddMinutes(-10)
+                AppointmentId = _appointmentId ?? Guid.Empty,
+                UserId = _userId,
+                CalendarId = _calendarId,
+                Name = _view.AppointmentName.Trim(),
+                Location = _view.Location.Trim(),
+                StartTime = _view.StartTime,
+                EndTime = _view.EndTime,
+                Reminders = _view.Reminders
             };
+        }
+
+        private void HandleSaveResult(AppointmentDto dto, ServiceResult<Guid> result)
+        {
+            switch (result.Status)
+            {
+                case HandleStatus.Conflict:
+                    if (_view.ConfirmOverwrite())
+                    {
+                        var overwriteResult = _appointmentService.SaveAppointment(
+                            dto,
+                            isOverwrite: true,
+                            isGroupMode: _view.IsGroupMode,
+                            participantEmails: _view.ParticipantEmails
+                        );
+                        HandleSaveResult(dto, overwriteResult);
+                    }
+                    break;
+                case HandleStatus.GroupDecision:
+                    if (_view.IsGroupMode && _view.ConfirmJoinGroup())
+                    {
+                        var joinResult = _appointmentService.SaveAppointment(
+                            dto,
+                            joinGroup: true,
+                            isGroupMode: _view.IsGroupMode,
+                            participantEmails: _view.ParticipantEmails
+                        );
+                        HandleSaveResult(dto, joinResult);
+                    }
+                    break;
+                case HandleStatus.Success:
+                    if (result.Data != Guid.Empty)
+                    {
+                        _appointmentId = result.Data;
+                        _view.AppointmentId = result.Data;
+
+                        var isGroupMeeting = _appointmentService.IsGroupMeeting(result.Data);
+                        _view.IsGroupMode = isGroupMeeting;
+
+                        if (isGroupMeeting)
+                            LoadParticipants(result.Data);
+                        else
+                            _view.BindParticipants(Array.Empty<string>());
+
+                        _view.ShowMessage(result.Message ?? "Lưu thành công!");
+                        LoadReminders(_appointmentId.Value);
+                    }
+                    else
+                        _view.ShowMessage(result.Message ?? "Thành công");
+                    break;
+
+                case HandleStatus.Error:
+                    _view.ShowError(result.Message);
+                    break;
+            }
+        }
+
+        public void HandleOpenGroupForm(Guid appId, string name, DateTime start, DateTime end)
+        {
+            var form = new GroupMeetingSugestion(_userId, appId, name, start, end);
+            form.ShowDialog(_view);
         }
     }
 }

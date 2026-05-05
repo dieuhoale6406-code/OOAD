@@ -111,7 +111,10 @@ namespace OOAD.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppointmentId")
+                    b.Property<Guid?>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("GroupMeetingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Message")
@@ -125,9 +128,14 @@ namespace OOAD.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ReminderId");
 
                     b.HasIndex("AppointmentId");
+
+                    b.HasIndex("UserId", "GroupMeetingId");
 
                     b.ToTable("Reminders");
                 });
@@ -253,10 +261,16 @@ namespace OOAD.Migrations
                     b.HasOne("OOAD.Model.Appointments", "Appointment")
                         .WithMany("Reminders")
                         .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("OOAD.Model.UserGroupMeetings", "UserGroupMeeting")
+                        .WithMany("Reminders")
+                        .HasForeignKey("UserId", "GroupMeetingId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Appointment");
+
+                    b.Navigation("UserGroupMeeting");
                 });
 
             modelBuilder.Entity("OOAD.Model.UserGroupMeetings", b =>
@@ -286,6 +300,11 @@ namespace OOAD.Migrations
             modelBuilder.Entity("OOAD.Model.Calendars", b =>
                 {
                     b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("OOAD.Model.UserGroupMeetings", b =>
+                {
+                    b.Navigation("Reminders");
                 });
 
             modelBuilder.Entity("OOAD.Model.Users", b =>

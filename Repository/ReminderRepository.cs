@@ -3,56 +3,23 @@ using OOAD.Model;
 
 namespace OOAD.Repository
 {
-    public class ReminderRepository
+    public class ReminderRepository : BaseRepository<Reminders>
     {
-        private readonly AppDBContext _context;
-
-        public ReminderRepository(AppDBContext context)
+        public ReminderRepository(AppDBContext context) : base(context) { }
+        public List<Reminders> GetRemindersByAppointmentId(Guid appointmentId)
         {
-            _context = context;
-        }
-
-        public IEnumerable<Reminders> GetAll()
-        {
-            return _context.Set<Reminders>()
-                .OrderBy(r => r.ReminderTime)
+            return Query
+                .Where(r => r.AppointmentId == appointmentId
+                            && r.UserId == null
+                            && r.GroupMeetingId == null)
                 .ToList();
         }
 
-        public IEnumerable<Reminders> GetByAppointmentId(Guid appointmentId)
+        public List<Reminders> GetRemindersByGroupMeetingId(Guid userId, Guid groupMeetingId)
         {
-            return _context.Set<Reminders>()
-                .Where(r => r.AppointmentId == appointmentId)
-                .OrderBy(r => r.ReminderTime)
+            return Query
+                .Where(r => r.UserId == userId && r.GroupMeetingId == groupMeetingId)
                 .ToList();
-        }
-
-        public Reminders? GetById(Guid reminderId)
-        {
-            return _context.Set<Reminders>().Find(reminderId);
-        }
-
-        public void Add(Reminders reminder)
-        {
-            _context.Set<Reminders>().Add(reminder);
-            _context.SaveChanges();
-        }
-
-        public void Update(Reminders reminder)
-        {
-            _context.Set<Reminders>().Update(reminder);
-            _context.SaveChanges();
-        }
-
-        public void Delete(Guid reminderId)
-        {
-            var reminder = GetById(reminderId);
-
-            if (reminder == null)
-                return;
-
-            _context.Set<Reminders>().Remove(reminder);
-            _context.SaveChanges();
         }
     }
 }

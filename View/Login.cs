@@ -1,20 +1,18 @@
 using OOAD.Presenter;
-using OOAD.Data;
-using OOAD.Repository;
-using OOAD.Service;
 
 namespace OOAD
 {
     public partial class Login : Form
     {
-        private LoginPresenter? _presenter;
+        private readonly LoginPresenter _presenter;
 
+        #region Properties for Presenter Binding
         [System.ComponentModel.Browsable(false)]
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public string EmailText
         {
             get => txtName.Text;
-            set => txtName.Text = value;
+            set => txtName.Text = value.Trim();
         }
 
         [System.ComponentModel.Browsable(false)]
@@ -24,29 +22,23 @@ namespace OOAD
             get => txtPass.Text;
             set => txtPass.Text = value;
         }
+        #endregion
 
+        #region Events (View -> Presenter)
         public event EventHandler? LoginRequested;
         public event EventHandler? ResetRequested;
         public event EventHandler? CancelRequested;
+        #endregion
 
         public Login()
         {
             InitializeComponent();
+             _presenter = new LoginPresenter(this);
 
             btnOK.Click += (_, _) => LoginRequested?.Invoke(this, EventArgs.Empty);
             btnReset.Click += (_, _) => ResetRequested?.Invoke(this, EventArgs.Empty);
             btnCancel.Click += (_, _) => CancelRequested?.Invoke(this, EventArgs.Empty);
 
-            InitializePresenter();
-        }
-
-        private void InitializePresenter()
-        {
-            var dbContext = new AppDBContext();
-            var userRepo = new UserRepository(dbContext);
-            var authService = new AuthService(userRepo);
-
-            _presenter = new LoginPresenter(this, authService);
             _presenter.Initialize();
         }
 
@@ -64,17 +56,9 @@ namespace OOAD
         {
             var main = new MainCalendar(userId);
             main.Show();
-            Hide();
+            this.Hide();
         }
 
-        public void CloseView()
-        {
-            Close();
-        }
-
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        public void CloseView() => this.Close();
     }
 }

@@ -11,6 +11,6 @@ namespace OOAD.Model
         public Guid CalendarId { get; set; }
         public Guid UserId { get; set; }
         public Users User { get; set; } = null!;
-        public List<Appointments> Appointments { get; set; } = new List<Appointments>();
+        public virtual ICollection<Appointments> Appointments { get; set; } = new List<Appointments>();
     }
 }

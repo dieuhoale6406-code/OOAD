@@ -1,73 +1,44 @@
-using OOAD.Model;
-using OOAD.Service;
+using OOAD.Services;
+using OOAD.Data;
 
 namespace OOAD.Presenter
 {
     public class GroupMeetingSuggestionPresenter
     {
-        private readonly GroupMeetingSugestion _view;
-        private readonly GroupMeetingService _groupMeetingService;
-        private readonly AppointmentService _appointmentService;
+        private GroupMeetingSugestion _view;
+        private AppointmentService _appointmentService;
+        private Guid _userId;
+        private Guid _groupMeetingId;
 
-        private GroupMeetings? _suggestedMeeting;
-
-        public GroupMeetingSuggestionPresenter(
-            GroupMeetingSugestion view,
-            GroupMeetingService groupMeetingService,
-            AppointmentService appointmentService)
+        public GroupMeetingSuggestionPresenter(GroupMeetingSugestion view, Guid userId, Guid groupMeetingId)
         {
             _view = view;
-            _groupMeetingService = groupMeetingService;
-            _appointmentService = appointmentService;
+            var context = new AppDBContext();
+            _appointmentService = new AppointmentService(context);
+            _userId = userId;
+            _groupMeetingId = groupMeetingId;
         }
 
         public void Initialize()
         {
             _view.ViewLoaded += OnViewLoaded;
-            _view.JoinRequested += OnJoinRequested;
-            _view.DeclineRequested += OnDeclineRequested;
+            _view.JoinRequested += (_, _) => 
+            {
+                HandleJoinRequest();
+                _view.CloseView();
+            };
+            _view.DeclineRequested += (_, _) => _view.CloseView();
         }
 
         private void OnViewLoaded(object? sender, EventArgs e)
         {
-            _suggestedMeeting = _groupMeetingService.FindMatchingGroupMeeting(
-                _view.AppointmentName,
-                _view.SelectedStartTime,
-                _view.SelectedEndTime);
-
-            _view.ShowSuggestion(_suggestedMeeting);
-        }
-
-        private void OnJoinRequested(object? sender, EventArgs e)
-        {
-            if (_suggestedMeeting == null)
-            {
-                _view.ShowError("Không có cuộc họp nhóm phù hợp.");
-                return;
-            }
-
-            if (_view.UserId == Guid.Empty)
-            {
-                _view.ShowError("Thiếu thông tin user.");
-                return;
-            }
-
-            _groupMeetingService.JoinGroupMeeting(
-                _view.UserId,
-                _suggestedMeeting.AppointmentId);
-
-            if (_view.AppointmentId != Guid.Empty)
-            {
-                _appointmentService.DeleteAppointment(_view.AppointmentId);
-            }
-
-            _view.ShowMessage($"Đã tham gia cuộc họp nhóm: {_suggestedMeeting.Name}");
+            _view.ShowMessage("Gợi ý tham gia nhóm được xử lý trực tiếp trong màn hình cuộc hẹn.");
             _view.CloseView();
         }
 
-        private void OnDeclineRequested(object? sender, EventArgs e)
+        private void HandleJoinRequest()
         {
-            _view.CloseView();
+            _appointmentService.JoinMeeting(_userId, _groupMeetingId);
         }
     }
 }
