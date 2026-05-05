@@ -117,6 +117,14 @@ namespace OOAD
                 SetParticipantsVisible(value);
             }
         }
+        public bool AddMode
+        {
+            set
+            {
+                rBtnAppointment.Enabled = value;
+                rBtnGroupMeeting.Enabled = value;
+            }
+        }
         #endregion
 
         #region Events (View -> Presenter)

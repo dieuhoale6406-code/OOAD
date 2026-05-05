@@ -41,10 +41,12 @@ namespace OOAD.Presenter
         {
             _view.CalendarId = _calendarId;
             _view.AppointmentId = _appointmentId;
-
-
             if (!_appointmentId.HasValue)
+            {
+                _view.AddMode = true;
                 return;
+            }
+            _view.AddMode = false;
             var result = _appointmentService.GetAppointmentById(_appointmentId.Value);
             if (result.Status == HandleStatus.Error)
             {
