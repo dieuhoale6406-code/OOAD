@@ -53,8 +53,8 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Elephant", 19.9999981F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.RoyalBlue;
+            label1.Font = new Font("Segoe UI Semibold", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.FromArgb(37, 99, 235);
             label1.Location = new Point(102, 40);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
@@ -65,7 +65,7 @@
             // txtName
             // 
             txtName.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtName.ForeColor = SystemColors.MenuHighlight;
+            txtName.ForeColor = Color.FromArgb(31, 41, 55);
             txtName.Location = new Point(212, 125);
             txtName.Margin = new Padding(2, 2, 2, 2);
             txtName.Name = "txtName";
@@ -77,7 +77,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            label2.ForeColor = Color.RoyalBlue;
+            label2.ForeColor = Color.FromArgb(31, 41, 55);
             label2.Location = new Point(102, 125);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
@@ -89,7 +89,7 @@
             // 
             lable3.AutoSize = true;
             lable3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            lable3.ForeColor = Color.RoyalBlue;
+            lable3.ForeColor = Color.FromArgb(31, 41, 55);
             lable3.Location = new Point(102, 175);
             lable3.Margin = new Padding(2, 0, 2, 0);
             lable3.Name = "lable3";
@@ -100,7 +100,7 @@
             // txtLocation
             // 
             txtLocation.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtLocation.ForeColor = SystemColors.MenuHighlight;
+            txtLocation.ForeColor = Color.FromArgb(31, 41, 55);
             txtLocation.Location = new Point(212, 175);
             txtLocation.Margin = new Padding(2, 2, 2, 2);
             txtLocation.Name = "txtLocation";
@@ -122,7 +122,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            label4.ForeColor = Color.RoyalBlue;
+            label4.ForeColor = Color.FromArgb(31, 41, 55);
             label4.Location = new Point(102, 232);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
@@ -134,7 +134,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            label5.ForeColor = Color.RoyalBlue;
+            label5.ForeColor = Color.FromArgb(31, 41, 55);
             label5.Location = new Point(102, 286);
             label5.Margin = new Padding(2, 0, 2, 0);
             label5.Name = "label5";
@@ -154,7 +154,10 @@
             // 
             // btnOK
             // 
-            btnOK.BackColor = Color.CornflowerBlue;
+            btnOK.BackColor = Color.FromArgb(37, 99, 235);
+            btnOK.Cursor = Cursors.Hand;
+            btnOK.FlatAppearance.BorderSize = 0;
+            btnOK.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216);
             btnOK.FlatStyle = FlatStyle.Flat;
             btnOK.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnOK.ForeColor = Color.White;
@@ -168,23 +171,25 @@
             // 
             // btnCancel
             // 
-            btnCancel.FlatAppearance.BorderColor = Color.CornflowerBlue;
-            btnCancel.FlatAppearance.BorderSize = 2;
+            btnCancel.BackColor = Color.White;
+            btnCancel.Cursor = Cursors.Hand;
+            btnCancel.FlatAppearance.BorderColor = Color.FromArgb(37, 99, 235);
+            btnCancel.FlatAppearance.BorderSize = 1;
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            btnCancel.ForeColor = Color.RoyalBlue;
+            btnCancel.ForeColor = Color.FromArgb(37, 99, 235);
             btnCancel.Location = new Point(291, 697);
             btnCancel.Margin = new Padding(2, 2, 2, 2);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(115, 36);
             btnCancel.TabIndex = 10;
             btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.UseVisualStyleBackColor = false;
             // 
             // listView1
             // 
             listView1.BorderStyle = BorderStyle.FixedSingle;
-            listView1.ForeColor = Color.DarkBlue;
+            listView1.ForeColor = Color.FromArgb(31, 41, 55);
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
             listView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
@@ -200,7 +205,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            label3.ForeColor = Color.RoyalBlue;
+            label3.ForeColor = Color.FromArgb(31, 41, 55);
             label3.Location = new Point(102, 444);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
@@ -211,7 +216,7 @@
             // comboBox1
             // 
             comboBox1.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            comboBox1.ForeColor = Color.RoyalBlue;
+            comboBox1.ForeColor = Color.FromArgb(31, 41, 55);
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Trước 15 phút", "Trước 30 phút", "Trước 1 tiếng", "Trước 2 tiếng", "Trước 1 ngày", "Trước 2 ngày", "Trước 1 tuần", "Trước 2 tuần", "Khác" });
             comboBox1.Location = new Point(212, 444);
@@ -223,11 +228,13 @@
             // 
             // btnAddReminder
             // 
-            btnAddReminder.BackColor = Color.CornflowerBlue;
+            btnAddReminder.BackColor = Color.FromArgb(37, 99, 235);
             btnAddReminder.FlatAppearance.BorderSize = 0;
+            btnAddReminder.Cursor = Cursors.Hand;
+            btnAddReminder.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216);
             btnAddReminder.FlatStyle = FlatStyle.Flat;
             btnAddReminder.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAddReminder.ForeColor = SystemColors.ControlLightLight;
+            btnAddReminder.ForeColor = Color.White;
             btnAddReminder.Location = new Point(476, 442);
             btnAddReminder.Margin = new Padding(2, 2, 2, 2);
             btnAddReminder.Name = "btnAddReminder";
@@ -238,8 +245,10 @@
             // 
             // btnDeleteReminder
             // 
-            btnDeleteReminder.BackColor = Color.Tomato;
+            btnDeleteReminder.BackColor = Color.FromArgb(239, 68, 68);
             btnDeleteReminder.FlatAppearance.BorderSize = 0;
+            btnDeleteReminder.Cursor = Cursors.Hand;
+            btnDeleteReminder.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 38, 38);
             btnDeleteReminder.FlatStyle = FlatStyle.Flat;
             btnDeleteReminder.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnDeleteReminder.ForeColor = Color.White;
@@ -257,7 +266,7 @@
             groupBox1.Controls.Add(rBtnAppointment);
             groupBox1.FlatStyle = FlatStyle.Flat;
             groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            groupBox1.ForeColor = Color.RoyalBlue;
+            groupBox1.ForeColor = Color.FromArgb(31, 41, 55);
             groupBox1.Location = new Point(102, 340);
             groupBox1.Margin = new Padding(2, 2, 2, 2);
             groupBox1.Name = "groupBox1";
@@ -272,6 +281,7 @@
             rBtnGroupMeeting.AutoSize = true;
             rBtnGroupMeeting.Location = new Point(293, 37);
             rBtnGroupMeeting.Margin = new Padding(2, 2, 2, 2);
+            rBtnGroupMeeting.ForeColor = Color.FromArgb(31, 41, 55);
             rBtnGroupMeeting.Name = "rBtnGroupMeeting";
             rBtnGroupMeeting.Size = new Size(88, 29);
             rBtnGroupMeeting.TabIndex = 1;
@@ -284,6 +294,7 @@
             rBtnAppointment.AutoSize = true;
             rBtnAppointment.Location = new Point(89, 37);
             rBtnAppointment.Margin = new Padding(2, 2, 2, 2);
+            rBtnAppointment.ForeColor = Color.FromArgb(31, 41, 55);
             rBtnAppointment.Name = "rBtnAppointment";
             rBtnAppointment.Size = new Size(103, 29);
             rBtnAppointment.TabIndex = 0;
@@ -295,7 +306,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ControlLightLight;
+            BackColor = Color.FromArgb(248, 250, 252);
             ClientSize = new Size(706, 767);
             Controls.Add(groupBox1);
             Controls.Add(btnDeleteReminder);

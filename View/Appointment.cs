@@ -69,12 +69,8 @@ namespace OOAD
             set => dtpEnd.Value = value;
         }
 
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public string ReminderType => comboBox1.Text;
 
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public Guid? SelectedReminderId
         {
             get
@@ -83,8 +79,6 @@ namespace OOAD
                 return listView1.SelectedItems[0].Tag is Guid id ? id : null;
             }
         }
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public List<ReminderDto> Reminders
         {
             get
@@ -105,19 +99,13 @@ namespace OOAD
                 return reminders;
             }
         }
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public ListView ReminderList => listView1;
 
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public IReadOnlyList<string> ParticipantEmails => _pendingParticipantEmails
             .Where(email => !string.IsNullOrWhiteSpace(email))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public bool IsGroupMode
         {
             get => rBtnGroupMeeting.Checked;
@@ -128,8 +116,6 @@ namespace OOAD
                 SetParticipantsVisible(value);
             }
         }
-        [System.ComponentModel.Browsable(false)]
-        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public bool AddMode
         {
             set
@@ -170,6 +156,7 @@ namespace OOAD
             listView1.Columns.Add("Type", 360);
 
             ConfigureParticipantsUi();
+            ApplyAppointmentLegacyTheme();
             IsGroupMode = false;
             rBtnGroupMeeting.CheckedChanged += (_, _) => SetParticipantsVisible(IsGroupMode);
 
@@ -322,6 +309,112 @@ namespace OOAD
                 .Distinct(StringComparer.OrdinalIgnoreCase);
         }
 
+
+        private void ApplyAppointmentLegacyTheme()
+        {
+            // Theme runtime để không phụ thuộc hoàn toàn vào Designer.
+            // Giữ font title bản cũ, nhưng để chữ thường dễ đọc hơn.
+            var primary = Color.RoyalBlue;
+            var danger = Color.FromArgb(239, 68, 68);
+            var text = Color.FromArgb(17, 24, 39);
+            var border = Color.FromArgb(37, 99, 235);
+
+            BackColor = Color.White;
+
+            label1.Font = new Font("Elephant", 20F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = primary;
+
+            foreach (var label in new[] { label2, lable3, label4, label5, label3 })
+            {
+                label.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                label.ForeColor = text;
+            }
+
+            groupBox1.ForeColor = text;
+            rBtnAppointment.ForeColor = text;
+            rBtnGroupMeeting.ForeColor = text;
+
+            txtName.ForeColor = text;
+            txtLocation.ForeColor = text;
+            comboBox1.ForeColor = text;
+            listView1.ForeColor = text;
+
+            if (_participantsLabel != null)
+            {
+                _participantsLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                _participantsLabel.ForeColor = text;
+            }
+
+            if (_participantEmailTextBox != null)
+            {
+                _participantEmailTextBox.ForeColor = text;
+                _participantEmailTextBox.BorderStyle = BorderStyle.FixedSingle;
+            }
+
+            if (_participantsListView != null)
+            {
+                _participantsListView.ForeColor = text;
+                _participantsListView.BorderStyle = BorderStyle.FixedSingle;
+            }
+
+            StylePrimaryButton(btnOK, primary);
+            StylePrimaryButton(btnAddReminder, primary);
+            StyleSecondaryButton(btnCancel, border);
+            StyleDangerButton(btnDeleteReminder, danger);
+
+            if (_addParticipantButton != null)
+                StylePrimaryButton(_addParticipantButton, primary);
+
+            if (_removeParticipantButton != null)
+                StyleDangerOutlineButton(_removeParticipantButton, danger);
+        }
+
+        private static void StylePrimaryButton(Button button, Color color)
+        {
+            button.BackColor = color;
+            button.ForeColor = Color.White;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button.Cursor = Cursors.Hand;
+            button.UseVisualStyleBackColor = false;
+        }
+
+        private static void StyleSecondaryButton(Button button, Color color)
+        {
+            button.BackColor = Color.White;
+            button.ForeColor = color;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderColor = color;
+            button.FlatAppearance.BorderSize = 1;
+            button.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button.Cursor = Cursors.Hand;
+            button.UseVisualStyleBackColor = false;
+        }
+
+        private static void StyleDangerButton(Button button, Color color)
+        {
+            button.BackColor = color;
+            button.ForeColor = Color.White;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button.Cursor = Cursors.Hand;
+            button.UseVisualStyleBackColor = false;
+        }
+
+        private static void StyleDangerOutlineButton(Button button, Color color)
+        {
+            button.BackColor = Color.White;
+            button.ForeColor = color;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderColor = color;
+            button.FlatAppearance.BorderSize = 1;
+            button.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button.Cursor = Cursors.Hand;
+            button.UseVisualStyleBackColor = false;
+        }
+
         private void ConfigureParticipantsUi()
         {
             // Tạo vùng hiển thị người tham gia bằng code để tránh phải phụ thuộc Designer.
@@ -345,18 +438,18 @@ namespace OOAD
 
             _addParticipantButton = new Button
             {
-                Location = new Point(930, 119),
+                Location = new Point(930, 118),
                 Name = "btnAddParticipant",
-                Size = new Size(70, 29),
+                Size = new Size(80, 36),
                 Text = "Add"
             };
             _addParticipantButton.Click += (_, _) => AddPendingParticipantEmailsFromInput();
 
             _removeParticipantButton = new Button
             {
-                Location = new Point(1010, 119),
+                Location = new Point(1020, 118),
                 Name = "btnRemoveParticipant",
-                Size = new Size(90, 29),
+                Size = new Size(95, 36),
                 Text = "Remove"
             };
             _removeParticipantButton.Click += (_, _) => RemoveSelectedPendingParticipantEmails();
