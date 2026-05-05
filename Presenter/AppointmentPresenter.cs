@@ -135,13 +135,11 @@ namespace OOAD.Presenter
             {
                 ReminderId = Guid.NewGuid(),
                 Type = reminderType,
-                Message = $"Nhắc nhở: {_view.AppointmentName}",
                 ReminderTime = reminderTime
             };
 
             var item = new ListViewItem(reminderTime.ToString("dd/MM/yyyy HH:mm"));
             item.SubItems.Add(newReminder.Type);
-            item.SubItems.Add(newReminder.Message);
             item.Tag = newReminder.ReminderId;
 
             _view.ReminderList.Items.Add(item);
@@ -230,20 +228,10 @@ namespace OOAD.Presenter
                     {
                         _appointmentId = result.Data;
                         _view.AppointmentId = result.Data;
-
-                        var isGroupMeeting = _appointmentService.IsGroupMeeting(result.Data);
-                        _view.IsGroupMode = isGroupMeeting;
-
-                        if (isGroupMeeting)
-                            LoadParticipants(result.Data);
-                        else
-                            _view.BindParticipants(Array.Empty<string>());
-
-                        _view.ShowMessage(result.Message ?? "Lưu thành công!");
-                        LoadReminders(_appointmentId.Value);
                     }
-                    else
-                        _view.ShowMessage(result.Message ?? "Thành công");
+
+                    _view.ShowMessage(result.Message ?? "Lưu thành công!");
+                    _view.CloseView();
                     break;
 
                 case HandleStatus.Error:

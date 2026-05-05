@@ -47,7 +47,7 @@
             // monthCalendar1
             // 
             monthCalendar1.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            monthCalendar1.ForeColor = Color.MidnightBlue;
+            monthCalendar1.ForeColor = Color.FromArgb(31, 41, 55);
             monthCalendar1.Location = new Point(62, 186);
             monthCalendar1.Margin = new Padding(7);
             monthCalendar1.Name = "monthCalendar1";
@@ -63,11 +63,11 @@
             dgvAppointment.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvAppointment.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(63, 105, 220);
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(37, 99, 235);
             dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             dataGridViewCellStyle1.ForeColor = Color.White;
             dataGridViewCellStyle1.Padding = new Padding(6, 0, 0, 0);
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(63, 105, 220);
+            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(37, 99, 235);
             dataGridViewCellStyle1.SelectionForeColor = Color.White;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvAppointment.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
@@ -85,10 +85,10 @@
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = Color.White;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(35, 45, 65);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(31, 41, 55);
             dataGridViewCellStyle2.Padding = new Padding(8, 0, 0, 0);
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(215, 231, 255);
-            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(20, 40, 80);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(219, 234, 254);
+            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(31, 41, 55);
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvAppointment.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dgvAppointment.RowTemplate.Height = 34;
@@ -98,9 +98,10 @@
             // 
             // btnAdd
             // 
-            btnAdd.BackColor = Color.FromArgb(86, 132, 235);
+            btnAdd.BackColor = Color.FromArgb(37, 99, 235);
             btnAdd.Cursor = Cursors.Hand;
             btnAdd.FlatAppearance.BorderSize = 0;
+            btnAdd.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216);
             btnAdd.FlatStyle = FlatStyle.Flat;
             btnAdd.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnAdd.ForeColor = Color.White;
@@ -114,9 +115,10 @@
             // 
             // btnUpdate
             // 
-            btnUpdate.BackColor = Color.FromArgb(86, 132, 235);
+            btnUpdate.BackColor = Color.FromArgb(37, 99, 235);
             btnUpdate.Cursor = Cursors.Hand;
             btnUpdate.FlatAppearance.BorderSize = 0;
+            btnUpdate.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216);
             btnUpdate.FlatStyle = FlatStyle.Flat;
             btnUpdate.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnUpdate.ForeColor = Color.White;
@@ -130,9 +132,10 @@
             // 
             // btnDelete
             // 
-            btnDelete.BackColor = Color.FromArgb(239, 83, 80);
+            btnDelete.BackColor = Color.FromArgb(239, 68, 68);
             btnDelete.Cursor = Cursors.Hand;
             btnDelete.FlatAppearance.BorderSize = 0;
+            btnDelete.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 38, 38);
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnDelete.ForeColor = Color.White;
@@ -148,7 +151,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.FromArgb(63, 105, 220);
+            label1.ForeColor = Color.FromArgb(75, 85, 99);
             label1.Location = new Point(62, 470);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
@@ -161,7 +164,7 @@
             label2.AutoSize = true;
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.FromArgb(63, 105, 220);
+            label2.ForeColor = Color.FromArgb(31, 41, 55);
             label2.Location = new Point(574, 139);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
@@ -173,12 +176,12 @@
             // 
             checkBox1.AutoSize = true;
             checkBox1.BackColor = Color.Transparent;
-            checkBox1.FlatAppearance.BorderColor = Color.FromArgb(63, 105, 220);
+            checkBox1.FlatAppearance.BorderColor = Color.FromArgb(37, 99, 235);
             checkBox1.FlatAppearance.BorderSize = 2;
-            checkBox1.FlatAppearance.CheckedBackColor = Color.FromArgb(215, 231, 255);
+            checkBox1.FlatAppearance.CheckedBackColor = Color.FromArgb(219, 234, 254);
             checkBox1.FlatStyle = FlatStyle.Flat;
             checkBox1.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox1.ForeColor = Color.FromArgb(63, 105, 220);
+            checkBox1.ForeColor = Color.FromArgb(75, 85, 99);
             checkBox1.Location = new Point(574, 521);
             checkBox1.Margin = new Padding(2);
             checkBox1.Name = "checkBox1";
@@ -192,7 +195,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Elephant", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.FromArgb(63, 105, 220);
+            label3.ForeColor = Color.FromArgb(37, 99, 235);
             label3.Location = new Point(62, 34);
             label3.Name = "label3";
             label3.Size = new Size(494, 77);
@@ -203,7 +206,7 @@
             // 
             lblGreeting.AutoSize = true;
             lblGreeting.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblGreeting.ForeColor = Color.FromArgb(45, 55, 72);
+            lblGreeting.ForeColor = Color.FromArgb(31, 41, 55);
             lblGreeting.Location = new Point(778, 9);
             lblGreeting.Name = "lblGreeting";
             lblGreeting.Size = new Size(308, 28);
@@ -212,9 +215,10 @@
             // 
             // btnLogout
             // 
-            btnLogout.BackColor = Color.FromArgb(239, 83, 80);
+            btnLogout.BackColor = Color.FromArgb(239, 68, 68);
             btnLogout.Cursor = Cursors.Hand;
             btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 38, 38);
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogout.ForeColor = Color.White;
@@ -229,7 +233,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(247, 249, 252);
+            BackColor = Color.FromArgb(248, 250, 252);
             ClientSize = new Size(1098, 592);
             Controls.Add(btnLogout);
             Controls.Add(lblGreeting);

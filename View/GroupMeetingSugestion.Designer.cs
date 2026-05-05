@@ -40,7 +40,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = Color.DarkBlue;
+            label1.ForeColor = Color.FromArgb(37, 99, 235);
             label1.Location = new Point(230, 27);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
@@ -51,9 +51,9 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.BackColor = SystemColors.ControlLightLight;
+            label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.MidnightBlue;
+            label2.ForeColor = Color.FromArgb(31, 41, 55);
             label2.Location = new Point(61, 87);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
@@ -63,11 +63,13 @@
             // 
             // btnJoin
             // 
-            btnJoin.BackColor = Color.CornflowerBlue;
+            btnJoin.BackColor = Color.FromArgb(37, 99, 235);
             btnJoin.FlatAppearance.BorderSize = 0;
+            btnJoin.Cursor = Cursors.Hand;
+            btnJoin.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216);
             btnJoin.FlatStyle = FlatStyle.Flat;
             btnJoin.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnJoin.ForeColor = SystemColors.ControlLightLight;
+            btnJoin.ForeColor = Color.White;
             btnJoin.Location = new Point(127, 154);
             btnJoin.Margin = new Padding(2, 2, 2, 2);
             btnJoin.Name = "btnJoin";
@@ -78,24 +80,26 @@
             // 
             // btnNoThanks
             // 
-            btnNoThanks.FlatAppearance.BorderColor = Color.RoyalBlue;
-            btnNoThanks.FlatAppearance.BorderSize = 3;
+            btnNoThanks.BackColor = Color.White;
+            btnNoThanks.Cursor = Cursors.Hand;
+            btnNoThanks.FlatAppearance.BorderColor = Color.FromArgb(37, 99, 235);
+            btnNoThanks.FlatAppearance.BorderSize = 1;
             btnNoThanks.FlatStyle = FlatStyle.Flat;
             btnNoThanks.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnNoThanks.ForeColor = Color.RoyalBlue;
+            btnNoThanks.ForeColor = Color.FromArgb(37, 99, 235);
             btnNoThanks.Location = new Point(359, 154);
             btnNoThanks.Margin = new Padding(2, 2, 2, 2);
             btnNoThanks.Name = "btnNoThanks";
             btnNoThanks.Size = new Size(115, 36);
             btnNoThanks.TabIndex = 3;
             btnNoThanks.Text = "No Thanks";
-            btnNoThanks.UseVisualStyleBackColor = true;
+            btnNoThanks.UseVisualStyleBackColor = false;
             // 
             // GroupMeetingSugestion
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ControlLightLight;
+            BackColor = Color.FromArgb(248, 250, 252);
             ClientSize = new Size(615, 238);
             Controls.Add(btnNoThanks);
             Controls.Add(btnJoin);
