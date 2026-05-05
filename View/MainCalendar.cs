@@ -44,6 +44,7 @@ namespace OOAD
         public event EventHandler? AddRequested;
         public event EventHandler? UpdateRequested;
         public event EventHandler? DeleteRequested;
+        public event EventHandler? LogoutRequested;
         #endregion
 
         public MainCalendar(Guid userId)
@@ -152,9 +153,8 @@ namespace OOAD
             if (confirm != DialogResult.Yes)
                 return;
 
-            // Cách này không phụ thuộc vào Login.OpenMainCalendar đang mở MainCalendar theo kiểu Show hay ShowDialog.
-            // Program.cs đang chạy Application.Run(new Login()), nên restart sẽ quay lại màn Login sạch nhất.
-            Application.Restart();
+            LogoutRequested?.Invoke(this, EventArgs.Empty);
+            Close();
         }
     }
 }

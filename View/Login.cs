@@ -33,7 +33,7 @@ namespace OOAD
         public Login()
         {
             InitializeComponent();
-             _presenter = new LoginPresenter(this);
+            _presenter = new LoginPresenter(this);
 
             btnOK.Click += (_, _) => LoginRequested?.Invoke(this, EventArgs.Empty);
             btnReset.Click += (_, _) => ResetRequested?.Invoke(this, EventArgs.Empty);
@@ -55,8 +55,30 @@ namespace OOAD
         public void OpenMainCalendar(Guid userId)
         {
             var main = new MainCalendar(userId);
+            bool isLoggingOut = false;
+
+            main.LogoutRequested += (_, _) =>
+            {
+                isLoggingOut = true;
+
+                EmailText = string.Empty;
+                PasswordText = string.Empty;
+
+                Show();
+                WindowState = FormWindowState.Normal;
+                Activate();
+            };
+
+            main.FormClosed += (_, _) =>
+            {
+                if (!isLoggingOut)
+                {
+                    Close();
+                }
+            };
+
             main.Show();
-            this.Hide();
+            Hide();
         }
 
         public void CloseView() => this.Close();
