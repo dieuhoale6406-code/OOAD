@@ -69,8 +69,12 @@ namespace OOAD
             set => dtpEnd.Value = value;
         }
 
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public string ReminderType => comboBox1.Text;
 
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public Guid? SelectedReminderId
         {
             get
@@ -79,6 +83,8 @@ namespace OOAD
                 return listView1.SelectedItems[0].Tag is Guid id ? id : null;
             }
         }
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public List<ReminderDto> Reminders
         {
             get
@@ -92,7 +98,6 @@ namespace OOAD
                         {
                             ReminderId = id,
                             Type = item.SubItems[1].Text,
-                            Message = item.SubItems[2].Text,
                             ReminderTime = DateTime.ParseExact(item.SubItems[0].Text, "dd/MM/yyyy HH:mm", null)
                         });
                     }
@@ -100,13 +105,19 @@ namespace OOAD
                 return reminders;
             }
         }
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public ListView ReminderList => listView1;
 
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public IReadOnlyList<string> ParticipantEmails => _pendingParticipantEmails
             .Where(email => !string.IsNullOrWhiteSpace(email))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public bool IsGroupMode
         {
             get => rBtnGroupMeeting.Checked;
@@ -117,6 +128,8 @@ namespace OOAD
                 SetParticipantsVisible(value);
             }
         }
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
         public bool AddMode
         {
             set
@@ -154,8 +167,7 @@ namespace OOAD
 
             listView1.Columns.Clear();
             listView1.Columns.Add("Time", 180);
-            listView1.Columns.Add("Type", 180);
-            listView1.Columns.Add("Message", 220);
+            listView1.Columns.Add("Type", 360);
 
             ConfigureParticipantsUi();
             IsGroupMode = false;
@@ -180,7 +192,6 @@ namespace OOAD
             {
                 var item = new ListViewItem(reminder.ReminderTime.ToString("dd/MM/yyyy HH:mm"));
                 item.SubItems.Add(reminder.Type);
-                item.SubItems.Add(reminder.Message);
                 item.Tag = reminder.ReminderId;
                 listView1.Items.Add(item);
             }

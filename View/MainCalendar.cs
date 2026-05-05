@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace OOAD
 {
@@ -13,15 +14,24 @@ namespace OOAD
         private readonly Guid _userId;
 
         #region Properties for Presenter Binding
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DateTime SelectedDate => monthCalendar1.SelectionStart.Date;
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool ShowAllAppointments => checkBox1.Checked;
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string GreetingText
         {
             get => lblGreeting.Text;
             set => lblGreeting.Text = value;
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Guid? SelectedAppointmentId
         {
             get
@@ -137,8 +147,10 @@ namespace OOAD
 
         public void OpenAppointmentForm(Guid calendarId, Guid? appointmentId, DateTime selectedDate)
         {
-            var form = new Appointment(_userId, calendarId, appointmentId, selectedDate);
+            using var form = new Appointment(_userId, calendarId, appointmentId, selectedDate);
             form.ShowDialog(this);
+
+            SelectedDateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void Logout()

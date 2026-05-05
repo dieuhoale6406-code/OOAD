@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace OOAD.Model
 {
@@ -11,7 +9,6 @@ namespace OOAD.Model
         public Guid ReminderId { get; set; }
         public DateTime ReminderTime { get; set; }
         public string Type { get; set; } = string.Empty;
-        public string Message { get; set; } = string.Empty;
 
         // Appointment
         public Guid? AppointmentId { get; set; }

@@ -83,8 +83,7 @@ namespace OOAD.Services
                 {
                     ReminderId = r.ReminderId,
                     ReminderTime = r.ReminderTime,
-                    Type = r.Type,
-                    Message = r.Message
+                    Type = r.Type
                 })
                 .ToList();
 
@@ -112,8 +111,7 @@ namespace OOAD.Services
                 {
                     ReminderId = r.ReminderId,
                     ReminderTime = r.ReminderTime,
-                    Type = r.Type,
-                    Message = r.Message
+                    Type = r.Type
                 })
                 .ToList();
 
@@ -420,8 +418,7 @@ namespace OOAD.Services
                         ? Guid.NewGuid()
                         : reminderDto.ReminderId,
                     ReminderTime = reminderDto.ReminderTime,
-                    Type = reminderDto.Type,
-                    Message = $"Nhắc nhở: {appointment.Name}"
+                    Type = reminderDto.Type
                 };
 
                 if (isGroupMeeting)
