@@ -131,6 +131,26 @@ namespace OOAD.Presenter
                 return;
             }
 
+            var existingReminders = _view.Reminders;
+
+            bool duplicateType = existingReminders
+                .Any(r => r.Type == reminderType && reminderType != "Khác");
+
+            bool duplicateTime = existingReminders
+                .Any(r => r.ReminderTime == reminderTime);
+
+            if (duplicateType)
+            {
+                _view.ShowError($"Reminder \"{reminderType}\" đã có trong danh sách.");
+                return;
+            }
+
+            if (duplicateTime)
+            {
+                _view.ShowError($"Đã có reminder vào lúc {reminderTime:dd/MM/yyyy HH:mm}.");
+                return;
+            }
+
             var newReminder = new ReminderDto
             {
                 ReminderId = Guid.NewGuid(),

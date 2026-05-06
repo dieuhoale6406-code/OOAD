@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace OOAD
 {
@@ -20,8 +21,8 @@ namespace OOAD
         private readonly List<string> _savedParticipantDisplays = new();
         private readonly List<string> _pendingParticipantEmails = new();
 
-        private const int NormalClientWidth = 680;
-        private const int GroupClientWidth = 1120;
+        private const int NormalClientWidth = 944;
+        private const int GroupClientWidth = 1500;
 
         private readonly Guid _userId;
         private readonly Guid _initialCalendarId;
@@ -106,6 +107,7 @@ namespace OOAD
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsGroupMode
         {
             get => rBtnGroupMeeting.Checked;
@@ -116,6 +118,7 @@ namespace OOAD
                 SetParticipantsVisible(value);
             }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AddMode
         {
             set
@@ -423,34 +426,38 @@ namespace OOAD
             _participantsLabel = new Label
             {
                 AutoSize = true,
-                Location = new Point(660, 92),
+                Location = new Point(950, 165),
                 Name = "lblParticipants",
-                Text = "Người tham gia:"
+                Text = "Người tham gia:",
+                Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0)
             };
 
             _participantEmailTextBox = new TextBox
             {
-                Location = new Point(660, 120),
+                Location = new Point(950, 225),
                 Name = "txtParticipantEmail",
                 PlaceholderText = "Nhập Gmail...",
-                Size = new Size(260, 27)
+                Size = new Size(280, 27),
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
             };
 
             _addParticipantButton = new Button
             {
-                Location = new Point(930, 118),
+                Location = new Point(1240, 224),
                 Name = "btnAddParticipant",
-                Size = new Size(80, 36),
-                Text = "Add"
+                Size = new Size(100, 40),
+                Text = "Thêm",
+                Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0)
             };
             _addParticipantButton.Click += (_, _) => AddPendingParticipantEmailsFromInput();
 
             _removeParticipantButton = new Button
             {
-                Location = new Point(1020, 118),
+                Location = new Point(1350, 224),
                 Name = "btnRemoveParticipant",
-                Size = new Size(95, 36),
-                Text = "Remove"
+                Size = new Size(70, 40),
+                Text = "Xóa",
+                Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0)
             };
             _removeParticipantButton.Click += (_, _) => RemoveSelectedPendingParticipantEmails();
 
@@ -459,14 +466,15 @@ namespace OOAD
                 FullRowSelect = true,
                 GridLines = true,
                 HeaderStyle = ColumnHeaderStyle.Nonclickable,
-                Location = new Point(660, 160),
+                Location = new Point(950, 280),
                 Name = "lvParticipants",
-                Size = new Size(440, 338),
+                Size = new Size(480, 340),
                 UseCompatibleStateImageBehavior = false,
-                View = View.Details
+                View = View.Details,
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0)
             };
 
-            _participantsListView.Columns.Add("Họ tên / Email", 415);
+            _participantsListView.Columns.Add("Họ tên / Email", 420);
 
             Controls.Add(_participantsLabel);
             Controls.Add(_participantEmailTextBox);

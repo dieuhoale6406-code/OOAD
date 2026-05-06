@@ -48,11 +48,10 @@
             // 
             monthCalendar1.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
             monthCalendar1.ForeColor = Color.FromArgb(31, 41, 55);
-            monthCalendar1.Location = new Point(62, 186);
-            monthCalendar1.Margin = new Padding(7);
+            monthCalendar1.Location = new Point(81, 238);
             monthCalendar1.Name = "monthCalendar1";
             monthCalendar1.TabIndex = 0;
-            monthCalendar1.TodayDate = new DateTime(2026, 5, 4, 0, 0, 0, 0);
+            monthCalendar1.TodayDate = new DateTime(0L);
             // 
             // dgvAppointment
             // 
@@ -75,8 +74,7 @@
             dgvAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dgvAppointment.EnableHeadersVisualStyles = false;
             dgvAppointment.GridColor = Color.FromArgb(225, 230, 242);
-            dgvAppointment.Location = new Point(574, 186);
-            dgvAppointment.Margin = new Padding(2);
+            dgvAppointment.Location = new Point(746, 238);
             dgvAppointment.MultiSelect = false;
             dgvAppointment.Name = "dgvAppointment";
             dgvAppointment.ReadOnly = true;
@@ -93,7 +91,7 @@
             dgvAppointment.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dgvAppointment.RowTemplate.Height = 34;
             dgvAppointment.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAppointment.Size = new Size(455, 309);
+            dgvAppointment.Size = new Size(592, 396);
             dgvAppointment.TabIndex = 1;
             // 
             // btnAdd
@@ -105,10 +103,9 @@
             btnAdd.FlatStyle = FlatStyle.Flat;
             btnAdd.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(364, 186);
-            btnAdd.Margin = new Padding(2);
+            btnAdd.Location = new Point(473, 238);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(120, 45);
+            btnAdd.Size = new Size(156, 58);
             btnAdd.TabIndex = 2;
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = false;
@@ -122,10 +119,9 @@
             btnUpdate.FlatStyle = FlatStyle.Flat;
             btnUpdate.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnUpdate.ForeColor = Color.White;
-            btnUpdate.Location = new Point(364, 288);
-            btnUpdate.Margin = new Padding(2);
+            btnUpdate.Location = new Point(473, 369);
             btnUpdate.Name = "btnUpdate";
-            btnUpdate.Size = new Size(120, 45);
+            btnUpdate.Size = new Size(156, 58);
             btnUpdate.TabIndex = 3;
             btnUpdate.Text = "Update";
             btnUpdate.UseVisualStyleBackColor = false;
@@ -139,10 +135,9 @@
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(364, 394);
-            btnDelete.Margin = new Padding(2);
+            btnDelete.Location = new Point(473, 504);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(120, 45);
+            btnDelete.Size = new Size(156, 58);
             btnDelete.TabIndex = 4;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = false;
@@ -152,10 +147,9 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(75, 85, 99);
-            label1.Location = new Point(62, 470);
-            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Location = new Point(81, 602);
             label1.Name = "label1";
-            label1.Size = new Size(182, 25);
+            label1.Size = new Size(243, 32);
             label1.TabIndex = 5;
             label1.Text = "Choosing Date: None";
             // 
@@ -165,10 +159,9 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.FromArgb(31, 41, 55);
-            label2.Location = new Point(574, 139);
-            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Location = new Point(746, 178);
             label2.Name = "label2";
-            label2.Size = new Size(228, 28);
+            label2.Size = new Size(306, 37);
             label2.TabIndex = 6;
             label2.Text = "Danh sách các buổi hẹn";
             // 
@@ -182,10 +175,9 @@
             checkBox1.FlatStyle = FlatStyle.Flat;
             checkBox1.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             checkBox1.ForeColor = Color.FromArgb(75, 85, 99);
-            checkBox1.Location = new Point(574, 521);
-            checkBox1.Margin = new Padding(2);
+            checkBox1.Location = new Point(746, 667);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(242, 25);
+            checkBox1.Size = new Size(336, 34);
             checkBox1.TabIndex = 7;
             checkBox1.Text = "Hiển thị tất cả cuộc hẹn của tôi";
             checkBox1.TextAlign = ContentAlignment.MiddleCenter;
@@ -196,9 +188,10 @@
             label3.AutoSize = true;
             label3.Font = new Font("Elephant", 30F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.FromArgb(37, 99, 235);
-            label3.Location = new Point(62, 34);
+            label3.Location = new Point(81, 44);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(494, 77);
+            label3.Size = new Size(655, 103);
             label3.TabIndex = 8;
             label3.Text = "Main Calendar";
             // 
@@ -207,9 +200,10 @@
             lblGreeting.AutoSize = true;
             lblGreeting.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblGreeting.ForeColor = Color.FromArgb(31, 41, 55);
-            lblGreeting.Location = new Point(778, 9);
+            lblGreeting.Location = new Point(1011, 12);
+            lblGreeting.Margin = new Padding(4, 0, 4, 0);
             lblGreeting.Name = "lblGreeting";
-            lblGreeting.Size = new Size(308, 28);
+            lblGreeting.Size = new Size(414, 37);
             lblGreeting.TabIndex = 9;
             lblGreeting.Text = "Xin chào Nguyễn Thị Cẩm Tuyền";
             // 
@@ -222,19 +216,20 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(882, 51);
+            btnLogout.Location = new Point(1147, 65);
+            btnLogout.Margin = new Padding(4, 4, 4, 4);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(110, 38);
+            btnLogout.Size = new Size(143, 49);
             btnLogout.TabIndex = 10;
             btnLogout.Text = "Đăng xuất";
             btnLogout.UseVisualStyleBackColor = false;
             // 
             // MainCalendar
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(248, 250, 252);
-            ClientSize = new Size(1098, 592);
+            ClientSize = new Size(1427, 758);
             Controls.Add(btnLogout);
             Controls.Add(lblGreeting);
             Controls.Add(label3);
@@ -246,7 +241,6 @@
             Controls.Add(btnAdd);
             Controls.Add(dgvAppointment);
             Controls.Add(monthCalendar1);
-            Margin = new Padding(2);
             Name = "MainCalendar";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainCalendar";

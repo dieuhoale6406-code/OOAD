@@ -55,10 +55,9 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(37, 99, 235);
-            label1.Location = new Point(102, 40);
-            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Location = new Point(133, 51);
             label1.Name = "label1";
-            label1.Size = new Size(495, 51);
+            label1.Size = new Size(699, 86);
             label1.TabIndex = 0;
             label1.Text = "Calendar Appointment";
             // 
@@ -66,11 +65,10 @@
             // 
             txtName.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtName.ForeColor = Color.FromArgb(31, 41, 55);
-            txtName.Location = new Point(212, 125);
-            txtName.Margin = new Padding(2, 2, 2, 2);
+            txtName.Location = new Point(276, 160);
             txtName.Name = "txtName";
             txtName.PlaceholderText = "Nhập tên cuộc họp";
-            txtName.Size = new Size(379, 29);
+            txtName.Size = new Size(491, 36);
             txtName.TabIndex = 1;
             // 
             // label2
@@ -78,10 +76,9 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             label2.ForeColor = Color.FromArgb(31, 41, 55);
-            label2.Location = new Point(102, 125);
-            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Location = new Point(133, 160);
             label2.Name = "label2";
-            label2.Size = new Size(65, 25);
+            label2.Size = new Size(85, 32);
             label2.TabIndex = 2;
             label2.Text = "Name:";
             // 
@@ -90,10 +87,9 @@
             lable3.AutoSize = true;
             lable3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             lable3.ForeColor = Color.FromArgb(31, 41, 55);
-            lable3.Location = new Point(102, 175);
-            lable3.Margin = new Padding(2, 0, 2, 0);
+            lable3.Location = new Point(133, 224);
             lable3.Name = "lable3";
-            lable3.Size = new Size(87, 25);
+            lable3.Size = new Size(113, 32);
             lable3.TabIndex = 4;
             lable3.Text = "Location:";
             // 
@@ -101,21 +97,19 @@
             // 
             txtLocation.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtLocation.ForeColor = Color.FromArgb(31, 41, 55);
-            txtLocation.Location = new Point(212, 175);
-            txtLocation.Margin = new Padding(2, 2, 2, 2);
+            txtLocation.Location = new Point(276, 224);
             txtLocation.Name = "txtLocation";
             txtLocation.PlaceholderText = "Nhập địa điểm họp";
-            txtLocation.Size = new Size(379, 29);
+            txtLocation.Size = new Size(491, 36);
             txtLocation.TabIndex = 3;
             // 
             // dtpStart
             // 
             dtpStart.CustomFormat = "hh:mm:ss dd/mm/yy";
             dtpStart.Format = DateTimePickerFormat.Custom;
-            dtpStart.Location = new Point(212, 232);
-            dtpStart.Margin = new Padding(2, 2, 2, 2);
+            dtpStart.Location = new Point(276, 297);
             dtpStart.Name = "dtpStart";
-            dtpStart.Size = new Size(379, 31);
+            dtpStart.Size = new Size(491, 39);
             dtpStart.TabIndex = 5;
             // 
             // label4
@@ -123,10 +117,9 @@
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             label4.ForeColor = Color.FromArgb(31, 41, 55);
-            label4.Location = new Point(102, 232);
-            label4.Margin = new Padding(2, 0, 2, 0);
+            label4.Location = new Point(133, 297);
             label4.Name = "label4";
-            label4.Size = new Size(102, 25);
+            label4.Size = new Size(133, 32);
             label4.TabIndex = 6;
             label4.Text = "Start Time:";
             // 
@@ -135,10 +128,9 @@
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             label5.ForeColor = Color.FromArgb(31, 41, 55);
-            label5.Location = new Point(102, 286);
-            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Location = new Point(133, 366);
             label5.Name = "label5";
-            label5.Size = new Size(93, 25);
+            label5.Size = new Size(120, 32);
             label5.TabIndex = 8;
             label5.Text = "End Time:";
             // 
@@ -146,10 +138,9 @@
             // 
             dtpEnd.CustomFormat = "hh:mm:ss dd/mm/yy";
             dtpEnd.Format = DateTimePickerFormat.Custom;
-            dtpEnd.Location = new Point(212, 286);
-            dtpEnd.Margin = new Padding(2, 2, 2, 2);
+            dtpEnd.Location = new Point(276, 366);
             dtpEnd.Name = "dtpEnd";
-            dtpEnd.Size = new Size(379, 31);
+            dtpEnd.Size = new Size(491, 39);
             dtpEnd.TabIndex = 7;
             // 
             // btnOK
@@ -161,10 +152,9 @@
             btnOK.FlatStyle = FlatStyle.Flat;
             btnOK.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnOK.ForeColor = Color.White;
-            btnOK.Location = new Point(102, 697);
-            btnOK.Margin = new Padding(2, 2, 2, 2);
+            btnOK.Location = new Point(133, 892);
             btnOK.Name = "btnOK";
-            btnOK.Size = new Size(115, 36);
+            btnOK.Size = new Size(150, 46);
             btnOK.TabIndex = 9;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = false;
@@ -174,14 +164,12 @@
             btnCancel.BackColor = Color.White;
             btnCancel.Cursor = Cursors.Hand;
             btnCancel.FlatAppearance.BorderColor = Color.FromArgb(37, 99, 235);
-            btnCancel.FlatAppearance.BorderSize = 1;
             btnCancel.FlatStyle = FlatStyle.Flat;
             btnCancel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnCancel.ForeColor = Color.FromArgb(37, 99, 235);
-            btnCancel.Location = new Point(291, 697);
-            btnCancel.Margin = new Padding(2, 2, 2, 2);
+            btnCancel.Location = new Point(378, 892);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(115, 36);
+            btnCancel.Size = new Size(150, 46);
             btnCancel.TabIndex = 10;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = false;
@@ -193,10 +181,9 @@
             listView1.FullRowSelect = true;
             listView1.GridLines = true;
             listView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            listView1.Location = new Point(102, 495);
-            listView1.Margin = new Padding(2, 2, 2, 2);
+            listView1.Location = new Point(133, 634);
             listView1.Name = "listView1";
-            listView1.Size = new Size(489, 179);
+            listView1.Size = new Size(635, 229);
             listView1.TabIndex = 12;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -206,10 +193,9 @@
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             label3.ForeColor = Color.FromArgb(31, 41, 55);
-            label3.Location = new Point(102, 444);
-            label3.Margin = new Padding(2, 0, 2, 0);
+            label3.Location = new Point(133, 568);
             label3.Name = "label3";
-            label3.Size = new Size(93, 25);
+            label3.Size = new Size(118, 32);
             label3.TabIndex = 13;
             label3.Text = "Reminder";
             // 
@@ -219,26 +205,24 @@
             comboBox1.ForeColor = Color.FromArgb(31, 41, 55);
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Trước 15 phút", "Trước 30 phút", "Trước 1 tiếng", "Trước 2 tiếng", "Trước 1 ngày", "Trước 2 ngày", "Trước 1 tuần", "Trước 2 tuần", "Khác" });
-            comboBox1.Location = new Point(212, 444);
-            comboBox1.Margin = new Padding(2, 2, 2, 2);
+            comboBox1.Location = new Point(276, 568);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(256, 29);
+            comboBox1.Size = new Size(332, 38);
             comboBox1.TabIndex = 14;
             comboBox1.Text = "Chọn thời gian";
             // 
             // btnAddReminder
             // 
             btnAddReminder.BackColor = Color.FromArgb(37, 99, 235);
-            btnAddReminder.FlatAppearance.BorderSize = 0;
             btnAddReminder.Cursor = Cursors.Hand;
+            btnAddReminder.FlatAppearance.BorderSize = 0;
             btnAddReminder.FlatAppearance.MouseOverBackColor = Color.FromArgb(29, 78, 216);
             btnAddReminder.FlatStyle = FlatStyle.Flat;
             btnAddReminder.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddReminder.ForeColor = Color.White;
-            btnAddReminder.Location = new Point(476, 442);
-            btnAddReminder.Margin = new Padding(2, 2, 2, 2);
+            btnAddReminder.Location = new Point(619, 566);
             btnAddReminder.Name = "btnAddReminder";
-            btnAddReminder.Size = new Size(115, 36);
+            btnAddReminder.Size = new Size(150, 46);
             btnAddReminder.TabIndex = 15;
             btnAddReminder.Text = "Add";
             btnAddReminder.UseVisualStyleBackColor = false;
@@ -246,16 +230,15 @@
             // btnDeleteReminder
             // 
             btnDeleteReminder.BackColor = Color.FromArgb(239, 68, 68);
-            btnDeleteReminder.FlatAppearance.BorderSize = 0;
             btnDeleteReminder.Cursor = Cursors.Hand;
+            btnDeleteReminder.FlatAppearance.BorderSize = 0;
             btnDeleteReminder.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 38, 38);
             btnDeleteReminder.FlatStyle = FlatStyle.Flat;
             btnDeleteReminder.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnDeleteReminder.ForeColor = Color.White;
-            btnDeleteReminder.Location = new Point(476, 697);
-            btnDeleteReminder.Margin = new Padding(2, 2, 2, 2);
+            btnDeleteReminder.Location = new Point(619, 892);
             btnDeleteReminder.Name = "btnDeleteReminder";
-            btnDeleteReminder.Size = new Size(115, 36);
+            btnDeleteReminder.Size = new Size(150, 46);
             btnDeleteReminder.TabIndex = 16;
             btnDeleteReminder.Text = "Delete";
             btnDeleteReminder.UseVisualStyleBackColor = false;
@@ -267,11 +250,9 @@
             groupBox1.FlatStyle = FlatStyle.Flat;
             groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             groupBox1.ForeColor = Color.FromArgb(31, 41, 55);
-            groupBox1.Location = new Point(102, 340);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Location = new Point(133, 435);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
-            groupBox1.Size = new Size(489, 83);
+            groupBox1.Size = new Size(636, 106);
             groupBox1.TabIndex = 17;
             groupBox1.TabStop = false;
             groupBox1.Text = "Loại lịch hẹn";
@@ -279,11 +260,10 @@
             // rBtnGroupMeeting
             // 
             rBtnGroupMeeting.AutoSize = true;
-            rBtnGroupMeeting.Location = new Point(293, 37);
-            rBtnGroupMeeting.Margin = new Padding(2, 2, 2, 2);
             rBtnGroupMeeting.ForeColor = Color.FromArgb(31, 41, 55);
+            rBtnGroupMeeting.Location = new Point(381, 47);
             rBtnGroupMeeting.Name = "rBtnGroupMeeting";
-            rBtnGroupMeeting.Size = new Size(88, 29);
+            rBtnGroupMeeting.Size = new Size(112, 36);
             rBtnGroupMeeting.TabIndex = 1;
             rBtnGroupMeeting.TabStop = true;
             rBtnGroupMeeting.Text = "Nhóm";
@@ -292,11 +272,10 @@
             // rBtnAppointment
             // 
             rBtnAppointment.AutoSize = true;
-            rBtnAppointment.Location = new Point(89, 37);
-            rBtnAppointment.Margin = new Padding(2, 2, 2, 2);
             rBtnAppointment.ForeColor = Color.FromArgb(31, 41, 55);
+            rBtnAppointment.Location = new Point(116, 47);
             rBtnAppointment.Name = "rBtnAppointment";
-            rBtnAppointment.Size = new Size(103, 29);
+            rBtnAppointment.Size = new Size(135, 36);
             rBtnAppointment.TabIndex = 0;
             rBtnAppointment.TabStop = true;
             rBtnAppointment.Text = "Cá nhân";
@@ -304,10 +283,10 @@
             // 
             // Appointment
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(248, 250, 252);
-            ClientSize = new Size(706, 767);
+            ClientSize = new Size(918, 982);
             Controls.Add(groupBox1);
             Controls.Add(btnDeleteReminder);
             Controls.Add(btnAddReminder);
@@ -325,7 +304,6 @@
             Controls.Add(label2);
             Controls.Add(txtName);
             Controls.Add(label1);
-            Margin = new Padding(2, 2, 2, 2);
             Name = "Appointment";
             Text = "Appointment";
             groupBox1.ResumeLayout(false);
