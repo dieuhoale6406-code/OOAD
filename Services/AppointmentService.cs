@@ -2,6 +2,7 @@ using OOAD.Data;
 using OOAD.DTOs;
 using OOAD.Model;
 using OOAD.Repository;
+using OOAD.Utils;
 
 namespace OOAD.Services
 {
@@ -377,7 +378,7 @@ namespace OOAD.Services
             return participantEmails
                 .Where(email => !string.IsNullOrWhiteSpace(email))
                 .Select(email => email.Trim().ToLowerInvariant())
-                .Where(email => email.Contains('@') && email.Contains('.'))
+                .Where(EmailValidator.IsValid)   
                 .Distinct(StringComparer.OrdinalIgnoreCase);
         }
 

@@ -1,12 +1,13 @@
 ﻿using OOAD.DTOs;
 using OOAD.Model;
 using OOAD.Presenter;
+using OOAD.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace OOAD
 {
@@ -301,15 +302,7 @@ namespace OOAD
 
         private static IEnumerable<string> ParseParticipantEmails(string raw)
         {
-            if (string.IsNullOrWhiteSpace(raw))
-                return Enumerable.Empty<string>();
-
-            var separators = new[] { ',', ';', '\r', '\n', '\t', ' ' };
-            return raw
-                .Split(separators, StringSplitOptions.RemoveEmptyEntries)
-                .Select(email => email.Trim().ToLowerInvariant())
-                .Where(email => email.Contains('@') && email.Contains('.'))
-                .Distinct(StringComparer.OrdinalIgnoreCase);
+            return EmailValidator.ParseAndFilter(raw);
         }
 
 
